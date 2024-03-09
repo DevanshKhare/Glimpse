@@ -19,6 +19,8 @@ import { ChangeEvent, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { isBase64Image } from "@/lib/utils";
 import AWS from 'aws-sdk'
+import { updateUser } from "@/lib/actions/user.actions";
+import { usePathname, useRouter } from "next/navigation";
 
 const S3_BUCKET ='devansh-threads-bucket';
 const REGION ='ap-south-1';
@@ -45,7 +47,8 @@ interface Props {
   btnTitle: string;
 }
 const AccountProfile = ({ user, btnTitle }: Props) => {
-  
+  const router = useRouter();
+  const pathname = usePathname();
   const [files, setFiles] = useState<File[]>([])
   const form = useForm({
     resolver: zodResolver(UserValidation),
@@ -74,7 +77,9 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
   async function onSubmit(values: z.infer<typeof UserValidation>) {
     const blob = values.profile_photo;
-    const hasImageChanged = isBase64Image(blob);
+    // const hasImageChanged = isBase64Image(blob);
+    const hasImageChanged = false;
+
     if (hasImageChanged) {
       const params = {
         Body: blob,
@@ -97,6 +102,19 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       } catch (err) {
         console.error(err);
       }
+    }
+    await updateUser({
+      userId: user.id,
+      name: values.name,
+      username: values.username,
+      bio: values.bio,
+      image: values.profile_photo,
+      path: pathname
+    });
+    if(pathname === "/profile/edit"){
+      router.back();
+    }else {
+      router.push("/")
     }
   }
 
