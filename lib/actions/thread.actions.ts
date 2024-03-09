@@ -33,3 +33,29 @@ export async function createThread({ text, author, communityId, path}: Params){
         throw new Error(`Error creating thread: ${error.message}`);
     }
 }
+
+export async function fetchThreads(pageNumber = 1, pageSize = 20) {
+  connectToDB();
+
+  const skipData = (pageNumber - 1) * pageSize;
+  //fetch the posts that have no parents
+  const threadsQuery = Thread.find({
+    parentId: { $in: [null, undefined] },
+  })
+    .sort({ createdAt: "desc" })
+    .skip(skipData)
+    .limit(pageSize)
+    .populate({ path: "author", model: User })
+    .populate({
+      path: "children",
+      populate: {
+        path: "author",
+        model: User,
+        select: "_id name parentId image",
+      },
+    })
+    const totalThreadsCount = await Thread.countDocuments({parentId: {$in: [null, undefined]}})
+    const threads = await threadsQuery.exec();
+    const isNext = totalThreadsCount > skipData + threads.length;
+    return { threads, isNext };
+}
