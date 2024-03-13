@@ -45,7 +45,8 @@ export async function updateUser({
 export async function fetchUser(userId: string) {
   try {
     connectToDB();
-    return await User.findOne({ id: userId });
+    const user =  await User.findOne({ id: userId });
+    return JSON.parse(JSON.stringify(user))
     // .populate({
     //   path: 'communities',
     //   model: Communities
@@ -72,7 +73,7 @@ export async function fetchUserThreads(userId: string) {
         },
       },
     });
-    return threads;
+    return JSON.parse(JSON.stringify(threads));
   } catch (error: any) {
     throw new Error("Error fetching the user threads");
   }
@@ -120,7 +121,7 @@ export async function fetchUsers({
 
     const isNext = totalUsersCount  > skipAmount + users.length;
 
-    return {users, isNext}
+    return {users: JSON.parse(JSON.stringify(users)), isNext}
   } catch (error) {
     throw new Error("Error completing search query");
   }
@@ -147,7 +148,7 @@ export async function getActivity(userId: string){
       select: "name image _id",
     });
 
-    return replies;
+    return JSON.parse(JSON.stringify(replies));
 
   } catch (error) {
     throw new Error("Error fetching activity");

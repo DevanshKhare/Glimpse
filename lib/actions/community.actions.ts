@@ -53,7 +53,7 @@ export async function fetchCommunityDetails(id: string) {
   try {
     connectToDB();
     const communityDetails = await Community.findOne({ id })
-    return communityDetails;
+    return JSON.parse(JSON.stringify(communityDetails));
   } catch (error) {
     // Handle any errors
     console.error("Error fetching community details:", error);
@@ -86,7 +86,8 @@ export async function fetchCommunityPosts(id: string) {
       ],
     });
 
-    return communityPosts;
+    return JSON.parse(JSON.stringify(communityPosts));
+
   } catch (error) {
     // Handle any errors
     console.error("Error fetching community posts:", error);
@@ -143,7 +144,7 @@ export async function fetchCommunities({
     // Check if there are more communities beyond the current page.
     const isNext = totalCommunitiesCount > skipAmount + communities.length;
 
-    return { communities, isNext };
+    return { communities: JSON.parse(JSON.stringify(communities)), isNext };
   } catch (error) {
     console.error("Error fetching communities:", error);
     throw error;

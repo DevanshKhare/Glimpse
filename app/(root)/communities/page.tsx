@@ -34,7 +34,7 @@ const Page = async ({searchParams}: {searchParams: {q: string}}) => {
         ):
         
         <>
-            {result.communities.map((community)=>(
+            {result.communities.map((community:any)=>(
               <CommunityCard
                 key={community.id}
                 id={community.id}

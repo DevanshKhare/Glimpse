@@ -1,3 +1,4 @@
+"use client"
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,8 +28,6 @@ interface Props {
 }
 const ThreadCard = ({
   id,
-  currentUserId,
-  parentId,
   content,
   author,
   community,
@@ -36,6 +35,9 @@ const ThreadCard = ({
   comments,
   isComment,
 }: Props) => {
+  const handleLike = (event:any) => {
+    console.log(event?.target)
+  }
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
@@ -70,6 +72,7 @@ const ThreadCard = ({
                   width={24}
                   height={24}
                   className="cursor-pointer object-contain"
+                  onClick={handleLike}
                 />
                 <Link href={`/thread/${id}`}>
                   <Image

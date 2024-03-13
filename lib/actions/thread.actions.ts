@@ -74,7 +74,7 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
     const totalThreadsCount = await Thread.countDocuments({parentId: {$in: [null, undefined]}})
     const threads = await threadsQuery.exec();
     const isNext = totalThreadsCount > skipData + threads.length;
-    return { threads, isNext };
+    return { threads: JSON.parse(JSON.stringify(threads)), isNext };
 }
 
 export async function fetchThreadById(id: string) {
@@ -105,7 +105,7 @@ export async function fetchThreadById(id: string) {
           },
         ],
       }).exec();
-      return thread 
+      return JSON.parse(JSON.stringify(thread)) 
   } catch (error) {
     throw new Error("Error fetching thread");
   }

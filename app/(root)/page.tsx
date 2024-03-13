@@ -13,7 +13,7 @@ export default async function Home() {
           <p className="no-result">No threads found</p>
         ) : (
           <>
-            {result.threads.map((thread) => (
+            {result.threads.map((thread:any) => (
               <ThreadCard
                 key={thread._id}
                 id={thread._id}

@@ -27,7 +27,7 @@ const Page = async ({searchParams}: {searchParams: {q: string}}) => {
             <p className="no-result">No Users</p>
         ):
         <>
-            {result.users.map((person)=>(
+            {result.users.map((person:any)=>(
               <UserCard
                 key={person.id}
                 id={person.id}
