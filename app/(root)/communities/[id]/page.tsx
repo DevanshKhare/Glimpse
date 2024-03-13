@@ -8,7 +8,6 @@ import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  console.log("params", params);
   const user = await currentUser();
   if (!user) return null;
   const communityDetails = await fetchCommunityDetails(params.id);
