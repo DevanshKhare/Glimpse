@@ -52,9 +52,7 @@ export async function createCommunity(
 export async function fetchCommunityDetails(id: string) {
   try {
     connectToDB();
-    console.log("id..............", id)
     const communityDetails = await Community.findOne({ id })
-    console.log("communityDetails.................", communityDetails)
     return communityDetails;
   } catch (error) {
     // Handle any errors

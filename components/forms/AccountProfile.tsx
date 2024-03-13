@@ -21,13 +21,14 @@ import { isBase64Image } from "@/lib/utils";
 import AWS from 'aws-sdk'
 import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
+import { PutObjectRequest } from "aws-sdk/clients/s3";
 
-const S3_BUCKET ='devansh-threads-bucket';
-const REGION ='ap-south-1';
+const S3_BUCKET = process.env.BUCKET_NAME;
+const REGION = process.env.BUCKET_REGION;
 
 AWS.config.update({
-    accessKeyId: 'AKIAQDAQFBWTAZTBVGPA',
-    secretAccessKey: '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'
+    accessKeyId: process.env.AWS_S3_ACCESS_ID,
+    secretAccessKey: process.env.AWS_S3_ACCESS_KEY
 })
 
 const myBucket = new AWS.S3({
@@ -81,9 +82,9 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     const hasImageChanged = false;
 
     if (hasImageChanged) {
-      const params = {
+      const params: PutObjectRequest = {
         Body: blob,
-        Bucket: S3_BUCKET,
+        Bucket: S3_BUCKET || "",
         Key: `${values.username}_profile_photo`,
       };
 
