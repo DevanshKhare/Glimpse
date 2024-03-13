@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
+import Community from "../models/community.model";
 
 interface Params{
     text: string;
@@ -12,26 +13,40 @@ interface Params{
     path: string
 }
 
-export async function createThread({ text, author, communityId, path}: Params){
+export async function createThread({ text, author, communityId, path }: Params
+) {
+  try {
+    connectToDB();
+
+    const communityIdObject = await Community.findOne(
+      { id: communityId },
+      { _id: 1 }
+    );
     
-    try {
-        connectToDB();
+    console.log("communityIdObject", communityIdObject)
     
-        const createdThread = await Thread.create({
-            text,
-            author,
-            community: null
-        });
-    
-        await User.findByIdAndUpdate(author, {
-            $push: { threads: createdThread._id}
-        })
-    
-        revalidatePath(path);
-        
-    } catch (error: any) {
-        throw new Error(`Error creating thread: ${error.message}`);
+    const createdThread = await Thread.create({
+      text,
+      author,
+      community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+    });
+
+    // Update User model
+    await User.findByIdAndUpdate(author, {
+      $push: { threads: createdThread._id },
+    });
+
+    if (communityIdObject) {
+      // Update Community model
+      await Community.findByIdAndUpdate(communityIdObject, {
+        $push: { threads: createdThread._id },
+      });
     }
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Failed to create thread: ${error.message}`);
+  }
 }
 
 export async function fetchThreads(pageNumber = 1, pageSize = 20) {
@@ -53,6 +68,10 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
         model: User,
         select: "_id name parentId image",
       },
+    })
+    .populate({
+      path: "community",
+      model: Community,
     })
     const totalThreadsCount = await Thread.countDocuments({parentId: {$in: [null, undefined]}})
     const threads = await threadsQuery.exec();
