@@ -23,12 +23,12 @@ import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
 import { PutObjectRequest } from "aws-sdk/clients/s3";
 
-const S3_BUCKET = process.env.BUCKET_NAME;
-const REGION = process.env.BUCKET_REGION;
+const S3_BUCKET = process.env.NEXT_PUBLIC_BUCKET_NAME;
+const REGION = process.env.NEXT_PUBLIC_BUCKET_REGION;
 
 AWS.config.update({
-    accessKeyId: process.env.AWS_S3_ACCESS_ID,
-    secretAccessKey: process.env.AWS_S3_ACCESS_KEY
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_ID,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY
 })
 
 const myBucket = new AWS.S3({
@@ -78,9 +78,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
   async function onSubmit(values: z.infer<typeof UserValidation>) {
     const blob = values.profile_photo;
-    // const hasImageChanged = isBase64Image(blob);
-    const hasImageChanged = false;
-
+    const hasImageChanged = isBase64Image(blob);
     if (hasImageChanged) {
       const params: PutObjectRequest = {
         Body: blob,
