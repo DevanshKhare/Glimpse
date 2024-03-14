@@ -133,3 +133,16 @@ export async function addCommentToThread(threadId: string, commentText: string, 
     throw new Error(`Error adding comment to thread ${error.message}`);
   }
 }
+
+export async function likeUnlikeThread(threadId: string, userId: string) {
+  try {
+    connectToDB();
+    await Thread.findOneAndUpdate(
+      { _id: threadId },
+      { $push: { likes: userId } }
+    );
+    revalidatePath("/")
+  } catch (error) {
+    console.log("error", error);
+  }
+}

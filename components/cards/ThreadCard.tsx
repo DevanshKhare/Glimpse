@@ -1,7 +1,9 @@
 "use client"
+import { likeUnlikeThread } from "@/lib/actions/thread.actions";
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 
 interface Props {
   id: string;
@@ -25,6 +27,7 @@ interface Props {
     };
   }[];
   isComment?: boolean;
+  liked: boolean
 }
 const ThreadCard = ({
   id,
@@ -34,9 +37,14 @@ const ThreadCard = ({
   createdAt,
   comments,
   isComment,
+  liked
 }: Props) => {
-  const handleLike = (event:any) => {
-    console.log(event?.target)
+
+  const {user} = useUser();
+  const handleLike = async({event, id}: {event:any, id: string}) => {
+    if(id && user?.id){
+      await likeUnlikeThread(id, user?.id)
+    }
   }
   return (
     <article
@@ -67,12 +75,12 @@ const ThreadCard = ({
             <div className="mt-5 flex flex-col gap-3">
               <div className="flex gap-3.5">
                 <Image
-                  src="/assets/heart-gray.svg"
+                  src={`/assets/heart-${liked ? "filled" : "gray"}.svg`}
                   alt="heart"
                   width={24}
                   height={24}
                   className="cursor-pointer object-contain"
-                  onClick={handleLike}
+                  onClick={()=>handleLike({event: event, id: id})}
                 />
                 <Link href={`/thread/${id}`}>
                   <Image

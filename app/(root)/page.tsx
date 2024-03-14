@@ -5,6 +5,12 @@ import { currentUser } from "@clerk/nextjs";
 export default async function Home() {
   const user = await currentUser();
   const result = await fetchThreads(1, 30);
+  const hasLikedThread = (threadLikes: string[]) =>{
+    if(user){
+      return threadLikes.includes(user?.id)
+    }
+    return false;
+  }
   return (
     <>
       <h1 className="head-text text-left">Home</h1>
@@ -24,6 +30,7 @@ export default async function Home() {
                 community={thread?.community}
                 createdAt={thread?.createdAt}
                 comments={thread?.children}
+                liked={hasLikedThread(thread.likes)}
               />
             ))}
           </>
