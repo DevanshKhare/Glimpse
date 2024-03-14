@@ -14,6 +14,14 @@ const Page = async ({ params }: { params: { id: string } }) => {
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   const thread = await fetchThreadById(params.id);
+
+  const hasLikedThread = (threadLikes: string[]) =>{
+    if(user){
+      return threadLikes.includes(user?.id)
+    }
+    return false;
+  }
+  
   return (
     <section className="relative">
       <div>
@@ -27,11 +35,13 @@ const Page = async ({ params }: { params: { id: string } }) => {
           community={thread?.community}
           createdAt={thread?.createdAt}
           comments={thread?.children}
+          liked={hasLikedThread(thread.likes)}
+          likes={thread.likes?.length}
         />
       </div>
       <div className="mt-7">
         <Comment
-          threadId={thread.id}
+          threadId={thread._id}
           currentUserImg={userInfo.image}
           currentUserId={JSON.stringify(userInfo._id)}
         />
@@ -49,6 +59,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
             createdAt={childItem?.createdAt}
             comments={childItem?.children}
             isComment
+            liked={hasLikedThread(childItem.likes)}
+            likes={childItem?.likes?.length}
           />
         ))}
       </div>
