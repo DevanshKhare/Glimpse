@@ -27,7 +27,8 @@ interface Props {
     };
   }[];
   isComment?: boolean;
-  liked: boolean
+  liked: boolean;
+  likes: number;
 }
 const ThreadCard = ({
   id,
@@ -37,11 +38,11 @@ const ThreadCard = ({
   createdAt,
   comments,
   isComment,
-  liked
+  liked,
+  likes
 }: Props) => {
-
   const {user} = useUser();
-  const handleLike = async({event, id}: {event:any, id: string}) => {
+  const handleLike = async({id}: {id: string}) => {
     if(id && user?.id){
       await likeUnlikeThread(id, user?.id)
     }
@@ -80,7 +81,7 @@ const ThreadCard = ({
                   width={24}
                   height={24}
                   className="cursor-pointer object-contain"
-                  onClick={()=>handleLike({event: event, id: id})}
+                  onClick={()=>handleLike({id: id})}
                 />
                 <Link href={`/thread/${id}`}>
                   <Image

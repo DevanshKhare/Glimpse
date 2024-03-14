@@ -31,6 +31,7 @@ export default async function Home() {
                 createdAt={thread?.createdAt}
                 comments={thread?.children}
                 liked={hasLikedThread(thread.likes)}
+                likes={thread?.likes?.length}
               />
             ))}
           </>

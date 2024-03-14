@@ -137,11 +137,20 @@ export async function addCommentToThread(threadId: string, commentText: string, 
 export async function likeUnlikeThread(threadId: string, userId: string) {
   try {
     connectToDB();
-    await Thread.findOneAndUpdate(
-      { _id: threadId },
-      { $push: { likes: userId } }
-    );
-    revalidatePath("/")
+    const thread = await Thread.findById(threadId);
+    const isLiked = thread.likes.includes(userId);
+    if (isLiked) {
+      await Thread.findOneAndUpdate(
+        { _id: threadId },
+        { $pull: { likes: userId } }
+      );
+    } else {
+      await Thread.findOneAndUpdate(
+        { _id: threadId },
+        { $push: { likes: userId } }
+      );
+    }
+    revalidatePath("/");
   } catch (error) {
     console.log("error", error);
   }
