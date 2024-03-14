@@ -20,6 +20,13 @@ const ThreadsTabs = async ({
     result = await fetchUserThreads(accountId);
   }
   if (!result) redirect("/");
+
+  const hasLikedThread = (threadLikes: string[]) =>{
+    if(currentUserId){
+      return threadLikes.includes(currentUserId)
+    }
+    return false;
+  }
   return (
     <section className="mt-9 flex flex-col gap-10">
       {result.threads.map((thread: any) => (
@@ -41,6 +48,8 @@ const ThreadsTabs = async ({
           community={thread?.community}
           createdAt={thread?.createdAt}
           comments={thread?.children}
+          liked={hasLikedThread(thread?.likes)}
+          likes={thread?.likes?.length}
         />
       ))}
     </section>
