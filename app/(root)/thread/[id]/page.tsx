@@ -17,7 +17,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
   const hasLikedThread = (threadLikes: string[]) =>{
     if(user){
-      return threadLikes.includes(user?.id)
+      return threadLikes?.includes(user?.id)
     }
     return false;
   }
@@ -26,8 +26,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
     <section className="relative">
       <div>
         <ThreadCard
-          key={thread._id}
-          id={thread._id}
+          key={thread?._id}
+          id={thread?._id}
           currentUserId={user?.id || ""}
           parentId={thread?.parentId}
           content={thread?.text}
@@ -35,22 +35,22 @@ const Page = async ({ params }: { params: { id: string } }) => {
           community={thread?.community}
           createdAt={thread?.createdAt}
           comments={thread?.children}
-          liked={hasLikedThread(thread.likes)}
-          likes={thread.likes?.length}
+          liked={hasLikedThread(thread?.likes)}
+          likes={thread?.likes?.length}
         />
       </div>
       <div className="mt-7">
         <Comment
-          threadId={thread._id}
+          threadId={thread?._id}
           currentUserImg={userInfo.image}
           currentUserId={JSON.stringify(userInfo._id)}
         />
       </div>
       <div className="mt-10">
-        {thread.children.map((childItem: any) => (
+        {thread?.children?.map((childItem: any) => (
           <ThreadCard
-            key={childItem._id}
-            id={childItem._id}
+            key={childItem?._id}
+            id={childItem?._id}
             currentUserId={childItem?.id || ""}
             parentId={childItem?.parentId}
             content={childItem?.text}
@@ -59,7 +59,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
             createdAt={childItem?.createdAt}
             comments={childItem?.children}
             isComment
-            liked={hasLikedThread(childItem.likes)}
+            liked={hasLikedThread(childItem?.likes)}
             likes={childItem?.likes?.length}
           />
         ))}
