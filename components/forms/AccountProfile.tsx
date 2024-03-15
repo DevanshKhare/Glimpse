@@ -22,6 +22,7 @@ import AWS from 'aws-sdk'
 import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
 import { PutObjectRequest } from "aws-sdk/clients/s3";
+import { revalidatePath } from "next/cache";
 
 const S3_BUCKET = process.env.NEXT_PUBLIC_BUCKET_NAME;
 const REGION = process.env.NEXT_PUBLIC_BUCKET_REGION;
@@ -50,7 +51,8 @@ interface Props {
 const AccountProfile = ({ user, btnTitle }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [files, setFiles] = useState<File[]>([])
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
@@ -66,7 +68,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     const fileReader = new FileReader();
     if(e.target.files && e.target.files.length > 0){
       const file = e.target.files[0];
-      setFiles(Array.from(e.target.files));
+      setSelectedFile(file);
       if(!file.type.includes("image")) return;
       fileReader.onload = async(event)=> {
         const imageDataUrl = event?.target?.result?.toString() || '';
@@ -77,25 +79,19 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
   }
 
   async function onSubmit(values: z.infer<typeof UserValidation>) {
-    const blob = values.profile_photo;
-    const hasImageChanged = isBase64Image(blob);
-    if (hasImageChanged) {
+    let location;
+    if (selectedFile) {
       const params: PutObjectRequest = {
-        Body: blob,
+        Body: selectedFile || "",
         Bucket: S3_BUCKET || "",
         Key: `${values.username}_profile_photo`,
+        ContentType: values.profile_photo.split(';')[0].split('/')[1]
       };
 
-      var upload = myBucket
-        .putObject(params)
-        .on("httpUploadProgress", (evt) => {
-          console.log(Math.round((evt.loaded / evt.total) * 100));
-        })
-        .promise();
-
       try {
-        const data = await upload;
+        const data = await myBucket.upload(params).promise();;
         if (data) {
+          location = data.Location;
           console.log("Uploaded successfully", data);
         }
       } catch (err) {
@@ -107,7 +103,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       name: values.name,
       username: values.username,
       bio: values.bio,
-      image: values.profile_photo,
+      image: location || "",
       path: pathname
     });
     if(pathname === "/profile/edit"){
