@@ -15,7 +15,7 @@ import * as z from "zod";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import AWS from 'aws-sdk'
+import AWS from "aws-sdk";
 import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
 import { PutObjectRequest } from "aws-sdk/clients/s3";
@@ -25,14 +25,14 @@ const S3_BUCKET = process.env.NEXT_PUBLIC_BUCKET_NAME;
 const REGION = process.env.NEXT_PUBLIC_BUCKET_REGION;
 
 AWS.config.update({
-    accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_ID,
-    secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY
-})
+  accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_ID,
+  secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY,
+});
 
 const myBucket = new AWS.S3({
-    params: { Bucket: S3_BUCKET},
-    region: REGION,
-})
+  params: { Bucket: S3_BUCKET },
+  region: REGION,
+});
 
 interface Props {
   user: {
@@ -49,7 +49,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
+
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
@@ -60,20 +60,23 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     },
   });
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>, fieldChange: (value: string)=>void) =>{
+  const handleImageChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: string) => void
+  ) => {
     e.preventDefault();
     const fileReader = new FileReader();
-    if(e.target.files && e.target.files.length > 0){
+    if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setSelectedFile(file);
-      if(!file.type.includes("image")) return;
-      fileReader.onload = async(event)=> {
-        const imageDataUrl = event?.target?.result?.toString() || '';
+      if (!file.type.includes("image")) return;
+      fileReader.onload = async (event) => {
+        const imageDataUrl = event?.target?.result?.toString() || "";
         fieldChange(imageDataUrl);
-      }
+      };
       fileReader.readAsDataURL(file);
     }
-  }
+  };
 
   async function onSubmit(values: z.infer<typeof UserValidation>) {
     let location;
@@ -86,13 +89,13 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       username: values.username,
       bio: values.bio,
       image: location || "",
-      path: pathname
+      path: pathname,
     });
 
-    if(pathname === "/profile/edit"){
+    if (pathname === "/profile/edit") {
       router.back();
-    }else {
-      router.push("/")
+    } else {
+      router.push("/");
     }
   }
 
@@ -106,34 +109,39 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           control={form.control}
           name="profile_photo"
           render={({ field }) => (
-            <FormItem className="flex items-center gap-4">
-              <FormLabel className="account-form_image-label">
-                {field.value ? (
-                  <Image
-                    src={field.value}
-                    alt="profile photo"
-                    width={96}
-                    height={96}
-                    priority
-                    className="rounded-full object-contain"
-                  />
-                ) : (
-                  <Image
-                    src="/assets/profile.svg"
-                    alt="profile photo"
-                    width={24}
-                    height={24}
-                    className="object-contain"
-                  />
-                )}
-              </FormLabel>
+            <FormItem className="flex items-center justify-center gap-4">
+              <div className="avatar">
+                <div className="w-24 rounded-full ring ring-primary-500 ring-offset-base-100 ring-offset-2">
+                  <FormLabel className="account-form_image-label">
+                    {field.value ? (
+                      <Image
+                        src={field.value}
+                        alt="profile photo"
+                        width={96}
+                        height={96}
+                        priority
+                        className="rounded-full object-contain"
+                      />
+                    ) : (
+                      <Image
+                        src="/assets/profile.svg"
+                        alt="profile photo"
+                        width={24}
+                        height={24}
+                        className="object-contain"
+                      />
+                    )}
+                  </FormLabel>
+                </div>
+              </div>
               <FormControl className="flex-1 text-base-semibold text-gray-200">
                 <Input
                   type="file"
                   accept="image/*"
                   placeholder="Upload a photo"
                   className="account-form_image-input"
-                  onChange={(e)=> handleImageChange(e, field.onChange)}
+                  style={{display: "none"}}
+                  onChange={(e) => handleImageChange(e, field.onChange)}
                 />
               </FormControl>
             </FormItem>
@@ -185,7 +193,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
               </FormLabel>
               <FormControl>
                 <Textarea
-                    rows={10}
+                  rows={10}
                   className="account-form_input no-focus"
                   {...field}
                 />
@@ -193,7 +201,9 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-primary-500">Submit</Button>
+        <Button type="submit" className="bg-primary-500">
+          Submit
+        </Button>
       </form>
     </Form>
   );
