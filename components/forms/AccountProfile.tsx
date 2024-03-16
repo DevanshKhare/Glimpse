@@ -88,7 +88,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       name: values.name,
       username: values.username,
       bio: values.bio,
-      image: location || "",
+      image: location || values?.profile_photo,
       path: pathname,
     });
 
