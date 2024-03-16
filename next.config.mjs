@@ -9,7 +9,8 @@ const nextConfig = {
       "images.clerk.dev",
       "devansh-threads-bucket.s3.ap-south-1.amazonaws.com"
     ]
-  }
+  },
+  reactStrictMode: false
 };
 
 export default nextConfig;

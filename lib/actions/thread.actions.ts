@@ -47,16 +47,15 @@ export async function createThread({ text, author, communityId, path }: Params
   }
 }
 
-export async function fetchThreads(pageNumber = 1, pageSize = 20) {
+export async function fetchThreads(skip=0, pageSize = 4) {
   connectToDB();
 
-  const skipData = (pageNumber - 1) * pageSize;
   //fetch the posts that have no parents
   const threadsQuery = Thread.find({
     parentId: { $in: [null, undefined] },
   })
     .sort({ createdAt: "desc" })
-    .skip(skipData)
+    .skip(skip)
     .limit(pageSize)
     .populate({ path: "author", model: User })
     .populate({
@@ -71,10 +70,8 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
       path: "community",
       model: Community,
     })
-    const totalThreadsCount = await Thread.countDocuments({parentId: {$in: [null, undefined]}})
     const threads = await threadsQuery.exec();
-    const isNext = totalThreadsCount > skipData + threads.length;
-    return { threads: JSON.parse(JSON.stringify(threads)), isNext };
+    return { threads: JSON.parse(JSON.stringify(threads)) };
 }
 
 export async function fetchThreadById(id: string) {
