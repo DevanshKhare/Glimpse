@@ -163,6 +163,7 @@ async function generateIds(threadId: string, threadsToBeDeleted: any){
   }
   const originalThread = await Thread.findById(threadId);
   if (originalThread.children.length > 0) {
+    console.log("originalThread", originalThread)
     await Promise.all(originalThread.children.map(async (child: any) => {
       threadsToBeDeleted.push(child._id.toString());
       await generateIds(child._id, threadsToBeDeleted);
@@ -186,6 +187,7 @@ export async function deleteThread(threadId: string) {
     if(threadToUnlinkFromUser.length > 0) {
       await User.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
     }
+    revalidatePath("/");
   } catch (error) {
   }
 }
