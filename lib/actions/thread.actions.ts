@@ -157,14 +157,23 @@ export async function likeUnlikeThread(threadId: string, userId: string) {
 }
 
 async function generateIds(threadId: string, threadsToBeDeleted: any){
-  const originalThread = await Thread.findById(threadId);
-
-  if(originalThread.children.length > 0){
-    originalThread.children.forEach(async(child: any)=> {
-      threadsToBeDeleted.push(child._id.toString())
-      await generateIds(child._id, threadsToBeDeleted)
-    })    
+  const responseObject = {
+    finalThreadsToBeDeleted: [],
+    threadToUnlinkFromUser: "",
   }
+  const originalThread = await Thread.findById(threadId);
+  if (originalThread.children.length > 0) {
+    await Promise.all(originalThread.children.map(async (child: any) => {
+      threadsToBeDeleted.push(child._id.toString());
+      await generateIds(child._id, threadsToBeDeleted);
+    }));
+  }
+  responseObject.finalThreadsToBeDeleted = threadsToBeDeleted;
+  if(!originalThread?.parentId){
+    responseObject.threadToUnlinkFromUser = threadId
+  }
+
+  return responseObject;
 }
 
 export async function deleteThread(threadId: string) {
@@ -172,7 +181,11 @@ export async function deleteThread(threadId: string) {
     connectToDB();
     let threadsToBeDeleted: any = [];
     threadsToBeDeleted.push(threadId);
-    await generateIds(threadId, threadsToBeDeleted)
+    const {finalThreadsToBeDeleted, threadToUnlinkFromUser } = await generateIds(threadId, threadsToBeDeleted);
+    await Thread.deleteMany({_id: {$in: finalThreadsToBeDeleted}});
+    if(threadToUnlinkFromUser.length > 0) {
+      await User.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
+    }
   } catch (error) {
   }
 }
