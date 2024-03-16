@@ -10,10 +10,11 @@ interface Params{
     text: string;
     author: string;
     communityId: string | null;
-    path: string
+    path: string,
+    media: string
 }
 
-export async function createThread({ text, author, communityId, path }: Params
+export async function createThread({ text, author, communityId, path, media }: Params
 ) {
   try {
     connectToDB();
@@ -27,6 +28,7 @@ export async function createThread({ text, author, communityId, path }: Params
       text,
       author,
       community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+      media: media
     });
 
     // Update User model
@@ -183,6 +185,8 @@ export async function deleteThread(threadId: string) {
     if(threadToUnlinkFromUser.length > 0) {
       await User.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
       await Community.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
+    revalidatePath("/");
+
     }
     revalidatePath("/");
   } catch (error) {

@@ -17,19 +17,28 @@ const myBucket = new AWS.S3({
 });
 export const uploadImage = async (
   selectedFile: File,
-  values: z.infer<typeof UserValidation>
+  // values: z.infer<typeof UserValidation>
+  values: any,
+  type?: string
 ) => {
   try {
-    const { username, profile_photo } = values;
-    const contentType = profile_photo.split(";")[0].split("/")[1];
-
+    let key: string;
+    let contentType: string;
+    if (type == "thread") {
+      const { media, thread } = values;
+      contentType = media.split(";")[0].split("/")[1];
+      key = `${thread.split(" ")[0]}_media_${new Date().getTime()}`;
+    } else {
+      const { username, profile_photo } = values;
+      contentType = profile_photo.split(";")[0].split("/")[1];
+      key = `${username}_profile_photo_${new Date().getTime()}`;
+    }
     const params: PutObjectRequest = {
       Body: selectedFile || "",
       Bucket: S3_BUCKET || "",
-      Key: `${username}_profile_photo_${new Date().getTime()}`,
+      Key: key,
       ContentType: contentType,
     };
-
     const data = await myBucket.upload(params).promise();
     return data?.Location;
   } catch (error) {

@@ -32,7 +32,10 @@ const threadSchema = new mongoose.Schema({
       type: String,
       ref: "User"
     }
-  ]
+  ],
+  media: {
+    type: String,
+  }
 });
 
 const Thread = mongoose.models.Thread || mongoose.model('Thread', threadSchema);

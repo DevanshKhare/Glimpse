@@ -75,6 +75,7 @@ const RenderThreadsSection = ({ user }: Params) => {
                   comments={thread?.children}
                   liked={hasLikedThread(thread.likes)}
                   likes={thread?.likes?.length}
+                  media={thread?.media}
                 />
               </section>
             ))}

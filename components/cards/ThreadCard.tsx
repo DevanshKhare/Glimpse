@@ -31,6 +31,7 @@ interface Props {
   isComment?: boolean;
   liked: boolean;
   likes: number;
+  media?: string
 }
 const ThreadCard = ({
   id,
@@ -41,7 +42,8 @@ const ThreadCard = ({
   comments,
   isComment,
   liked,
-  likes
+  likes,
+  media
 }: Props) => {
   const [lStatus, setLStatus] = useState(false);
   const { user } = useUser();
@@ -70,7 +72,10 @@ const ThreadCard = ({
       <div className="flex flex-start justify-between">
         <div className="flex w-full flex-1 flex-row gap-4">
           <div className="flex flex-col items-center">
-            <Link href={`/profile/${author?.id}`} className="relative h-11 w-11">
+            <Link
+              href={`/profile/${author?.id}`}
+              className="relative h-11 w-11"
+            >
               <Image
                 src={author?.image}
                 alt="profile image"
@@ -86,11 +91,29 @@ const ThreadCard = ({
                 {author?.name}
               </h4>
             </Link>
+            {media && (
+              <div className="h-[20rem] w-[20rem] mt-5">
+                <Image
+                  src={media || ""}
+                  alt="media"
+                  className="h-[20rem] w-[20rem] object-contain "
+                  width={0}
+                  height={0}
+                  quality={100}
+                  unoptimized
+                  decoding="async"
+                  loading="lazy"
+                  style={{ imageRendering: "optimizeQuality" }}
+                />
+              </div>
+            )}
             <p className="mt-2 text-small-regular text-light-2">{content}</p>
             <div className="mt-5 flex flex-col gap-3">
               <div className="flex gap-3.5">
                 <Image
-                  src={`/assets/heart-${(liked || lStatus) ? "filled" : "gray"}.svg`}
+                  src={`/assets/heart-${
+                    liked || lStatus ? "filled" : "gray"
+                  }.svg`}
                   alt="heart"
                   width={24}
                   height={24}
