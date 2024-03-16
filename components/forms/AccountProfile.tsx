@@ -15,24 +15,9 @@ import * as z from "zod";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import AWS from "aws-sdk";
 import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
-import { PutObjectRequest } from "aws-sdk/clients/s3";
 import { uploadImage } from "@/lib/s3client";
-
-const S3_BUCKET = process.env.NEXT_PUBLIC_BUCKET_NAME;
-const REGION = process.env.NEXT_PUBLIC_BUCKET_REGION;
-
-AWS.config.update({
-  accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_ID,
-  secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY,
-});
-
-const myBucket = new AWS.S3({
-  params: { Bucket: S3_BUCKET },
-  region: REGION,
-});
 
 interface Props {
   user: {

@@ -3,9 +3,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    serverComponentsExternalPackagesPathPattern: ['mongoose', 'aws-sdk']
-  },
   images: {
     domains: [
       "img.clerk.com",
