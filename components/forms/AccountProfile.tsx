@@ -6,23 +6,20 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { isBase64Image } from "@/lib/utils";
 import AWS from 'aws-sdk'
 import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
 import { PutObjectRequest } from "aws-sdk/clients/s3";
-import { revalidatePath } from "next/cache";
+import { uploadImage } from "@/lib/s3client";
 
 const S3_BUCKET = process.env.NEXT_PUBLIC_BUCKET_NAME;
 const REGION = process.env.NEXT_PUBLIC_BUCKET_REGION;
@@ -44,7 +41,7 @@ interface Props {
     username: string;
     name: string;
     bio: string;
-    image: string;
+    image?: string;
   };
   btnTitle: string;
 }
@@ -81,22 +78,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
   async function onSubmit(values: z.infer<typeof UserValidation>) {
     let location;
     if (selectedFile) {
-      const params: PutObjectRequest = {
-        Body: selectedFile || "",
-        Bucket: S3_BUCKET || "",
-        Key: `${values.username}_profile_photo`,
-        ContentType: values.profile_photo.split(';')[0].split('/')[1]
-      };
-
-      try {
-        const data = await myBucket.upload(params).promise();;
-        if (data) {
-          location = data.Location;
-          console.log("Uploaded successfully", data);
-        }
-      } catch (err) {
-        console.error(err);
-      }
+      location = await uploadImage(selectedFile, values);
     }
     await updateUser({
       userId: user.id,
@@ -106,6 +88,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       image: location || "",
       path: pathname
     });
+
     if(pathname === "/profile/edit"){
       router.back();
     }else {
