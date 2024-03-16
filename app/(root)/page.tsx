@@ -1,10 +1,14 @@
 import ThreadCard from "@/components/cards/ThreadCard";
 import { fetchThreads } from "@/lib/actions/thread.actions";
+import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const user = await currentUser();
   const result = await fetchThreads(1, 30);
+  const userInfo = await fetchUser(user?.id || "");
+  if (!userInfo?.onboarded) redirect("/onboarding");
   const hasLikedThread = (threadLikes: string[]) =>{
     if(user){
       return threadLikes.includes(user?.id)
