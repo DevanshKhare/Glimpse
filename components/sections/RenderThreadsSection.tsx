@@ -39,7 +39,6 @@ const RenderThreadsSection = ({ user }: Params) => {
     if (didFetchNewThreads) {
       setSkip((prevSkip) => prevSkip + 4);
     }
-    console.log("skip........",skip)
   }, [skip]);
 
   return (
