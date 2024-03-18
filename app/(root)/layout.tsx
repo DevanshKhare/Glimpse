@@ -24,12 +24,10 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <Topbar/>
-          <main className="flex flex-row">
+          <main className="flex flex-row justify-center px-[8rem]">
             <LeftSidebar/>
-            <section className="main-container">
-              <div className="w-full max-w-4xl">
+            <section className="main-container w-full max-w-4xl px-4 py-8">
                 {children}
-              </div>
             </section>
             <RightSidebar/>
           </main>

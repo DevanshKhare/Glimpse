@@ -12,7 +12,7 @@ function LeftSidebar() {
     const {userId} = useAuth();
   return (
     <section className="custom-scrollbar leftsidebar">
-      <div className="flex w-full flex-1 flex-col gap-6 px-6">
+      <div className="flex w-full flex-1 flex-col gap-5 px-6 ">
         {sidebarLinks.map((link) => {
             const isActive = (pathname.includes(link.route) && link.route.length > 1) || pathname === link.route;
             if(link.route === "/profile") link.route = `${link.route}/${userId}`
@@ -32,8 +32,6 @@ function LeftSidebar() {
             </Link>
           );
         })}
-      </div>
-      <div className="mt-10 px-6">
         <SignedIn>
             <SignOutButton signOutCallback={()=>{router.push("/sign-in")}}> 
               <div className="flex cursor-pointer gap-4 p-4">
