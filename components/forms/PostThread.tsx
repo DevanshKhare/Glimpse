@@ -43,6 +43,8 @@ function PostThread({ userId }: { userId: string }) {
   }, [selectedFile]);
 
   const onSubmit = async (values: z.infer<typeof ThreadsValidation>) => {
+    console.log(values)
+
     let location;
     if (selectedFile) {
       location = await uploadImage(selectedFile, values, "thread");

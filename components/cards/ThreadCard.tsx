@@ -88,7 +88,7 @@ const ThreadCard = ({
         </div>
         <div className="">
           <h3>{user?.firstName}</h3>
-          <small>Satna, {timeAgo(createdAt)}</small>
+          <small>{timeAgo(createdAt)}</small>
         </div>
       </div>
       {media && (
@@ -172,7 +172,7 @@ const ThreadCard = ({
         </span>
 
         {likes > 0 && <p className="ml-[0.5rem]">
-          Liked by <b>{firstLikedName}</b> {likes > 1 && (<><span>and</span><b>{likes-1} others</b></>)}
+          Liked by <b>{firstLikedName}</b> {likes > 1 && (<><span>and&nbsp;</span><b>{likes-1} others</b></>)}
         </p>}
       </div>
       <div className="caption">

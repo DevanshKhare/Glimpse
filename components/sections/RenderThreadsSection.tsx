@@ -4,10 +4,12 @@ import { User } from "@clerk/nextjs/server";
 import React, { useEffect, useState } from "react";
 import ThreadCard from "../cards/ThreadCard";
 import InfiniteScroll from "react-infinite-scroll-component";
+import SingleLineThreadCreate from "../forms/SingleLineThreadCreate";
 interface Params {
   user: User | null;
+  userInfo: any
 }
-const RenderThreadsSection = ({ user }: Params) => {
+const RenderThreadsSection = ({ user, userInfo }: Params) => {
   const [threads, setThreads] = useState<Params[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [skip, setSkip] = useState(0);
@@ -47,6 +49,7 @@ const RenderThreadsSection = ({ user }: Params) => {
         <p className="no-result">No threads found</p>
       ) : (
         <>
+          <SingleLineThreadCreate userId={userInfo?._id} user={user} userInfo={userInfo}/>
           <InfiniteScroll
             dataLength={threads.length}
             next={() => setSkip((prevSkip) => prevSkip + 4)}

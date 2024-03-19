@@ -9,8 +9,8 @@ export default async function Home() {
   if (!userInfo?.onboarded) redirect("/onboarding");
   // }
   return (
-    <>
-          <RenderThreadsSection user={JSON.parse(JSON.stringify(user))}/>
+    <>  
+          <RenderThreadsSection user={JSON.parse(JSON.stringify(user))} userInfo={userInfo}/>
     </>
   );
 }

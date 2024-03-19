@@ -50,7 +50,7 @@ function LeftSidebar() {
                 alt={link.label}
                 width={24}
                 height={24}
-                className="ml-[2rem] relative"
+                className="ml-[2rem] relative mr-4"
               />
               <p
                 className={`text-light-1 max-lg:hidden ${
