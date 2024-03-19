@@ -87,7 +87,7 @@ const ThreadCard = ({
           />
         </div>
         <div className="">
-          <h3>{user?.firstName}</h3>
+          <h3>{author?.name}</h3>
           <small>{timeAgo(createdAt)}</small>
         </div>
       </div>

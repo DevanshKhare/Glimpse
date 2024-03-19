@@ -5,7 +5,6 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Community from "../models/community.model";
-import ThreadsTabs from "@/components/shared/ThreadsTab";
 
 interface Params{
     text: string;
@@ -28,7 +27,7 @@ export async function createThread({ text, author, communityId, path, media }: P
     const createdThread = await Thread.create({
       text,
       author,
-      community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+      community: communityIdObject ? communityIdObject : null, // Assign communityId if provided, or leave it null for personal account
       media: media
     });
 
@@ -38,7 +37,6 @@ export async function createThread({ text, author, communityId, path, media }: P
     });
 
     if (communityIdObject) {
-      // Update Community model
       await Community.findByIdAndUpdate(communityIdObject, {
         $push: { threads: createdThread._id },
       });

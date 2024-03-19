@@ -25,12 +25,13 @@ export default function RootLayout({
         <body className={inter.className}>
           <Topbar />
           <main className="relative top-[6.4rem]">
-            <div className="grid grid-cols-[18vw,auto,20vw] gap-x-[2rem] w-[80%] my-0 mx-auto">
+            <div className="grid grid-cols-[100%,100%,100%] md:grid-cols-[18vw,auto,20vw] gap-x-[2rem] w-[80%] my-0 mx-auto">
               <LeftSidebar />
-              <section>{children}</section>
+              <section className="md:col-start-2">{children}</section>
               <RightSidebar />
             </div>
           </main>
+
           <Bottombar />
         </body>
       </html>

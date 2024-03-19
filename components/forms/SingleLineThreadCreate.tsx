@@ -31,6 +31,7 @@ function SingleLineThreadCreate({
   const router = useRouter();
   const pathname = usePathname();
   const { organization } = useOrganization();
+
   const form = useForm({
     resolver: zodResolver(ThreadsValidation),
     defaultValues: {
@@ -41,15 +42,17 @@ function SingleLineThreadCreate({
   });
 
   const onSubmit = async (values: z.infer<typeof ThreadsValidation>) => {
+
     await createThread({
       text: values.thread,
       author: userId,
       communityId: organization ? organization.id : null,
-      path: "/",
+      path: pathname,
       media: "",
     });
-    router.push("/");
+    form.reset();
   };
+  
   return (
     <Form {...form}>
       <form

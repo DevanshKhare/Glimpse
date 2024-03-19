@@ -11,6 +11,7 @@ function LeftSidebar() {
   const pathname = usePathname();
   const { userId } = useAuth();
   const user = useUser();
+  
   return (
     <section className="h-max sticky top-[6.4rem] max-xl:hidden">
       <Link
@@ -21,7 +22,7 @@ function LeftSidebar() {
           <Image
             className="block w-full"
             alt="test"
-            src="https://i.pinimg.com/280x280_RS/70/bd/dc/70bddcca951f099b28dfc499cdef0163.jpg"
+            src={user?.user?.imageUrl || ""}
             width={24}
             height={24}
           />

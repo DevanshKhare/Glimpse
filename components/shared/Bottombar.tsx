@@ -1,5 +1,5 @@
 "use client";
-import { sidebarLinks } from "@/constants";
+import { bottomBarLinks } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ function Bottombar() {
   return (
     <section className="bottombar">
       <div className="bottombar_container">
-        {sidebarLinks.map((link) => {
+        {bottomBarLinks.map((link) => {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;

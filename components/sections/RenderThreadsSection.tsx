@@ -49,7 +49,6 @@ const RenderThreadsSection = ({ user, userInfo }: Params) => {
         <p className="no-result">No threads found</p>
       ) : (
         <>
-          <SingleLineThreadCreate userId={userInfo?._id} user={user} userInfo={userInfo}/>
           <InfiniteScroll
             dataLength={threads.length}
             next={() => setSkip((prevSkip) => prevSkip + 4)}

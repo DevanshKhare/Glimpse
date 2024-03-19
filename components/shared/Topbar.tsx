@@ -10,14 +10,14 @@ function Topbar() {
       <div className="w-4/5 my-0 mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-4">
           <Image src="/assets/logo.svg" alt="logo" height={28} width={28} />
-          <p className="text-heading3-bold text-light-1 max-xs:hidden">
+          <p className="text-heading3-bold text-light-1 hidden md:block">
             Threads
           </p>
         </Link>
 
         <SearchBar page="search" />
         <div className="flex items-center gap-[2rem]">
-          <div className="flex gap-[2rem] items-center ">
+          <div className="hidden md:flex gap-[2rem] items-center">
             <Link href="/create-thread" className="bg-primary-500 py-[0.6rem] px-[2rem] rounded-[2rem] cursor-pointer">
               Create
             </Link>
