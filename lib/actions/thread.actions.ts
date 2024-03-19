@@ -5,6 +5,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Community from "../models/community.model";
+import ThreadsTabs from "@/components/shared/ThreadsTab";
 
 interface Params{
     text: string;
@@ -190,5 +191,15 @@ export async function deleteThread(threadId: string) {
     }
     revalidatePath("/");
   } catch (error) {
+  }
+}
+
+export async function getFirstLikedUserDetails(userId: string){
+  try {
+    connectToDB();
+    let user = await User.findOne({id: userId}).select("name")
+    return user;
+  } catch (error) {
+    console.log("error finding fist user liked")
   }
 }

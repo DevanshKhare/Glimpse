@@ -1,6 +1,6 @@
 "use client";
-import { deleteThread, likeUnlikeThread } from "@/lib/actions/thread.actions";
-import { formatDateString } from "@/lib/utils";
+import { deleteThread, getFirstLikedUserDetails, likeUnlikeThread } from "@/lib/actions/thread.actions";
+import { formatDateString, timeAgo } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
@@ -32,6 +32,7 @@ interface Props {
   liked: boolean;
   likes: number;
   media?: string;
+  firstLiked: string
 }
 const ThreadCard = ({
   id,
@@ -44,24 +45,31 @@ const ThreadCard = ({
   liked,
   likes,
   media,
+  firstLiked
 }: Props) => {
   const [lStatus, setLStatus] = useState(false);
   const { user } = useUser();
-
+  const [firstLikedName, setFirstLikedName] = useState("");
   const handleLike = async ({ id }: { id: string }) => {
     if (id && user?.id) {
       setLStatus(!lStatus);
       await likeUnlikeThread(id, user?.id);
     }
   };
+  useEffect(() =>{
+    (async()=>{
+      const firstLikedUser = await getFirstLikedUserDetails(firstLiked);
+      setFirstLikedName(firstLikedUser?.name);
+    })();
+  },[firstLiked])
 
   useEffect(() => {
     setLStatus(liked);
   }, [liked]);
-
   const handleDeleteThread = async () => {
     await deleteThread(id);
   };
+
   return (
     <div className="flex flex-col justify-between bg-dark-2 text-light-2 rounded-[2rem] mx-0 leading-6 p-[1rem]">
       <div className="flex gap-[1rem]">
@@ -80,7 +88,7 @@ const ThreadCard = ({
         </div>
         <div className="">
           <h3>{user?.firstName}</h3>
-          <small>Satna, 15 MINUTES AGO</small>
+          <small>Satna, {timeAgo(createdAt)}</small>
         </div>
       </div>
       {media && (
@@ -163,17 +171,17 @@ const ThreadCard = ({
           />
         </span>
 
-        <p className="ml-[0.5rem]">
-          Liked by <b>Devansh</b> and <b>10 others</b>
-        </p>
+        {likes > 0 && <p className="ml-[0.5rem]">
+          Liked by <b>{firstLikedName}</b> {likes > 1 && (<><span>and</span><b>{likes-1} others</b></>)}
+        </p>}
       </div>
       <div className="caption">
         <p>
-          <b>Devansh </b>This section is for caption{" "}
-          <span className="hash-tag">#Hashtag</span>
+          <b>{user?.firstName} </b>{content}{" "}
+          {/* <span className="hash-tag">#Hashtag</span> */}
         </p>
       </div>
-      <div className="comments text-gray-1">View all 277 comments</div>
+      {comments.length > 0 && <div className="comments text-gray-1">View {comments.length > 1 &&  "all"} {comments.length} comments</div>}
     </div>
   );
 };

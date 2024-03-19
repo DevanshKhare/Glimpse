@@ -12,7 +12,7 @@ function LeftSidebar() {
   const { userId } = useAuth();
   const user = useUser();
   return (
-    <section className="h-max sticky top-[6.4rem]">
+    <section className="h-max sticky top-[6.4rem] max-xl:hidden">
       <Link
         href="/"
         className="rounded-[1rem] flex items-center p-[1rem] gap-x-[1em] w-full bg-dark-2"

@@ -41,3 +41,44 @@ export function formatThreadCount(count: number): string {
     return `${threadCount} ${threadWord}`;
   }
 }
+
+export function timeAgo(date: string) {
+  const currentDate = new Date();
+  const timestamp = new Date(date).getTime();
+  const currentTimestamp = currentDate.getTime();
+  const timeDifference = currentTimestamp - timestamp;
+
+  const calculateTimeUnit = (unit: any, value: any) => {
+    return value === 1 ? `${value} ${unit}` : `${value} ${unit}s`;
+  };
+
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  const month = 30 * day;
+  const year = 365 * day;
+
+  if (timeDifference < minute) {
+    return (
+      calculateTimeUnit("second", Math.round(timeDifference / 1000)) + " ago"
+    );
+  } else if (timeDifference < hour) {
+    return (
+      calculateTimeUnit("minute", Math.round(timeDifference / minute)) + " ago"
+    );
+  } else if (timeDifference < day) {
+    return (
+      calculateTimeUnit("hour", Math.round(timeDifference / hour)) + " ago"
+    );
+  } else if (timeDifference < month) {
+    return calculateTimeUnit("day", Math.round(timeDifference / day)) + " ago";
+  } else if (timeDifference < year) {
+    return (
+      calculateTimeUnit("month", Math.round(timeDifference / month)) + " ago"
+    );
+  } else {
+    return (
+      calculateTimeUnit("year", Math.round(timeDifference / year)) + " ago"
+    );
+  }
+}
