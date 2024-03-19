@@ -55,11 +55,11 @@ body{
   }
 
   .searchbar {
-    @apply flex gap-1 rounded-lg bg-dark-3 px-4 py-2;
+    @apply flex gap-1 rounded-[2rem] bg-dark-3 px-4 py-2;
   }
 
   .searchbar_input {
-    @apply border-none bg-dark-3 text-base-regular text-light-4 outline-none !important;
+    @apply border-none w-[30vw] ml-[1rem] bg-dark-3 text-base-regular text-light-4 outline-none !important;
   }
 
   .topbar {

@@ -9,7 +9,7 @@ const SearchBar = ({page}: {page: string}) => {
     const handleSearch = (event: any) => {
         const searchString = event?.target?.value || "";
         if(searchString) return router.push(`/${page}?q=${searchString}`)
-        else return router.push(`/${page}`)
+        else return router.push(`/`)
     }
   return (
     <div className="searchbar">
@@ -21,7 +21,7 @@ const SearchBar = ({page}: {page: string}) => {
           className="object-contain"
         />
         <Input
-          type="text"
+          type="search"
           placeholder="Search"
           className="no-focus searchbar_input"
           onKeyUp={handleSearch}

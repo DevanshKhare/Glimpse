@@ -62,9 +62,8 @@ const ThreadCard = ({
   const handleDeleteThread = async () => {
     await deleteThread(id);
   };
-
   return (
-    <div className="flex flex-col justify-between bg-dark-2 text-light-2 rounded-md mx-0 my-[1rem] leading-6 p-[1rem]">
+    <div className="flex flex-col justify-between bg-dark-2 text-light-2 rounded-[2rem] mx-0 leading-6 p-[1rem]">
       <div className="flex gap-[1rem]">
         <div className="w-11 aspect-square rounded-full overflow-hidden h-11 ">
           <Image
@@ -80,24 +79,26 @@ const ThreadCard = ({
           />
         </div>
         <div className="">
-          <h3>Devansh </h3>
+          <h3>{user?.firstName}</h3>
           <small>Satna, 15 MINUTES AGO</small>
         </div>
       </div>
-      {media && <div className="rounded-[1rem] overflow-hidden mx-0 my-[0.7rem]">
-        <Image
-          src={media || ""}
-          alt="media"
-          className="w-[100%] block"
-          width={0}
-          height={0}
-          quality={100}
-          unoptimized
-          decoding="async"
-          loading="lazy"
-          style={{ imageRendering: "optimizeQuality" }}
-        />
-      </div>}
+      {media && (
+        <div className="rounded-[1rem] overflow-hidden mx-0 my-[0.7rem]">
+          <Image
+            src={media || ""}
+            alt="media"
+            className="w-[100%] block"
+            width={0}
+            height={0}
+            quality={100}
+            unoptimized
+            decoding="async"
+            loading="lazy"
+            style={{ imageRendering: "optimizeQuality" }}
+          />
+        </div>
+      )}
       <div className="flex justify-between items-center m-[0.6rem]">
         <div className="flex gap-3.5">
           <Image
@@ -136,19 +137,43 @@ const ThreadCard = ({
       </div>
       <div className="flex">
         <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
-          <Image src={author.image} height={0} width={0} alt="icon" className="h-[1.4rem] w-[1.4rem] first:m-[0.1rem]" quality={100} unoptimized decoding="async" loading="lazy"/>
+          <Image
+            src={author.image}
+            height={0}
+            width={0}
+            alt="icon"
+            className="h-[1.4rem] w-[1.4rem] first:m-[0.1rem]"
+            quality={100}
+            unoptimized
+            decoding="async"
+            loading="lazy"
+          />
         </span>
-                <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
-          <Image src={author.image} height={0} width={0} alt="icon" className="h-[1.4rem] w-[1.4rem] first:m-[0.1rem]" quality={100} unoptimized decoding="async" loading="lazy"/>
+        <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
+          <Image
+            src={author.image}
+            height={0}
+            width={0}
+            alt="icon"
+            className="h-[1.4rem] w-[1.4rem] first:m-[0.1rem]"
+            quality={100}
+            unoptimized
+            decoding="async"
+            loading="lazy"
+          />
         </span>
-        
-              <p className="ml-[0.5rem]">Liked by <b>Devansh</b> and <b>10 others</b></p>
 
+        <p className="ml-[0.5rem]">
+          Liked by <b>Devansh</b> and <b>10 others</b>
+        </p>
       </div>
-            <div className="caption">
-              <p><b>Devansh </b>This section is for caption <span className="hash-tag">#Hashtag</span></p>
-            </div>
-            <div className="comments text-gray-1">View all 277 comments</div>
+      <div className="caption">
+        <p>
+          <b>Devansh </b>This section is for caption{" "}
+          <span className="hash-tag">#Hashtag</span>
+        </p>
+      </div>
+      <div className="comments text-gray-1">View all 277 comments</div>
     </div>
   );
 };
