@@ -23,15 +23,15 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
-          <Topbar/>
-          <main className="flex flex-row justify-center px-[8rem]">
-            <LeftSidebar/>
-            <section className="main-container w-full max-w-4xl px-4 py-8">
-                {children}
-            </section>
-            <RightSidebar/>
+          <Topbar />
+          <main className="relative top-[6.4rem]">
+            <div className="grid grid-cols-[18vw,auto,20vw] gap-x-[2rem] w-[80%] my-0 mx-auto">
+              <LeftSidebar />
+              <section>{children}</section>
+              <RightSidebar />
+            </div>
           </main>
-          <Bottombar/>
+          <Bottombar />
         </body>
       </html>
     </ClerkProvider>

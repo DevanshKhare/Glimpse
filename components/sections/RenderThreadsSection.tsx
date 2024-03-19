@@ -43,7 +43,6 @@ const RenderThreadsSection = ({ user }: Params) => {
 
   return (
     <>
-      <h1 className="head-text text-left">Home</h1>
       {threads?.length === 0 ? (
         <p className="no-result">No threads found</p>
       ) : (
@@ -60,8 +59,8 @@ const RenderThreadsSection = ({ user }: Params) => {
               </p>
             }
           >
-            {threads?.map((thread: any) => (
-              <section className="mt-9 flex flex-col">
+            {threads?.map((thread: any, index) => (
+              <section className={`${index!=0 && "mt-9"} flex flex-col`}>
                 <ThreadCard
                   key={thread?._id}
                   id={thread?._id}
@@ -76,6 +75,7 @@ const RenderThreadsSection = ({ user }: Params) => {
                   likes={thread?.likes?.length}
                   media={thread?.media}
                 />
+
               </section>
             ))}
           </InfiniteScroll>

@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 
 function Topbar() {
   return (
-    <nav className="w-full bg-dark-2 px-0 py-[0.7rem] fixed top-0">
+    <nav className="w-full bg-dark-2 px-0 py-[0.7rem] fixed top-0 z-10 mb-[1rem]">
       <div className="w-4/5 my-0 mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-4">
           <Image src="/assets/logo.svg" alt="logo" height={28} width={28} />
@@ -18,9 +18,9 @@ function Topbar() {
         <SearchBar page="search" />
         <div className="flex items-center gap-[2rem]">
           <div className="flex gap-[2rem] items-center ">
-            <label className="bg-primary-500 py-[0.6rem] px-[2rem] rounded-[2rem] cursor-pointer">
+            <Link href="/create-thread" className="bg-primary-500 py-[0.6rem] px-[2rem] rounded-[2rem] cursor-pointer">
               Create
-            </label>
+            </Link>
           </div>
           <div className="block ">
             <SignedIn>
