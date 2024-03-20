@@ -132,12 +132,10 @@ export async function addCommentToThread(threadId: string, commentText: string, 
   }
 }
 
-export async function likeUnlikeThread(threadId: string, userId: string) {
+export async function likeUnlikeThread(threadId: string, userId: string, liked: boolean) {
   try {
     connectToDB();
-    const thread = await Thread.findById(threadId);
-    const isLiked = thread.likes.includes(userId);
-    if (isLiked) {
+    if (liked) {
       await Thread.findOneAndUpdate(
         { _id: threadId },
         { $pull: { likes: userId } }
@@ -202,7 +200,7 @@ export async function getFirstLikedUserDetails(userId: string){
   }
 }
 
-export async function bookmarkcard(cardId: string, userId: string, isBookmarked: boolean){
+export async function bookmarkcard(cardId: string, userId: string, isBookmarked: boolean, path: any){
   try {
     connectToDB();
     if (isBookmarked) {
@@ -214,7 +212,21 @@ export async function bookmarkcard(cardId: string, userId: string, isBookmarked:
         $push: { bookmarks: userId },
       });
     }
-    revalidatePath("/");
+    if(path){
+      revalidatePath(path);
+    }
   } catch (error) {
   }
+}
+
+export async function getBookmarkedThreads(userId: string){
+  try {
+    connectToDB();
+    const response = await Thread.find({author: userId, bookmarks: {$exists: true, $ne: []}}).populate({
+      path: "author",
+      model: User,
+      select: "_id image"
+    })
+    return JSON.parse(JSON.stringify(response)) ;
+  }catch (error) {}
 }

@@ -1,111 +1,46 @@
-"use client";
-import { bookmarkcard, deleteThread, getFirstLikedUserDetails, likeUnlikeThread } from "@/lib/actions/thread.actions";
+"use client"
+import { bookmarkcard, deleteThread, likeUnlikeThread } from "@/lib/actions/thread.actions";
 import { timeAgo } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import { fetchUserImages } from "@/lib/actions/user.actions";
 import { CiBookmark } from "react-icons/ci";
 import { CiBookmarkRemove } from "react-icons/ci";
+import { usePathname } from "next/navigation";
 
 interface Props {
+  user?: any;
   id: string;
-  currentUserId: string;
-  parentId: string | null;
   content: string;
   author: {
     name: string;
     image: string;
     id: string;
   };
-  community: {
-    id: string;
-    name: string;
-    image: string;
-  } | null;
   createdAt: string;
-  comments: {
-    author: {
-      image: string;
-    };
-  }[];
-  isComment?: boolean;
   liked: boolean;
-  likes: number;
   media?: string;
-  firstLiked: string;
-  update?: Function;
-  section?: string;
-  loggedInId?: string;
-  profileId?: string;
-  likesArray?: string[];
   bookmarked?: boolean;
 }
-const ThreadCard = ({
+const BookmarkThreadCard = ({
+  user,
   id,
   content,
   author,
-  community,
   createdAt,
-  comments,
-  isComment,
   liked,
-  likes,
   media,
-  firstLiked,
-  update,
-  section,
-  loggedInId,
-  profileId,
-  likesArray,
-  bookmarked
+  bookmarked,
 }: Props) => {
-  const [lStatus, setLStatus] = useState(false);
-  const { user } = useUser();
-  const [firstLikedName, setFirstLikedName] = useState("");
-  const [likedImages, setLikedImages] = useState<string[]>([]);
   const handleLike = async ({ id }: { id: string }) => {
     if (id && user?.id) {
-      setLStatus((prev)=>!prev);
       await likeUnlikeThread(id, user?.id, liked);
     }
   };
+  const pathname = usePathname();
 
-  useEffect(()=>{
-    (async()=>{
-      if(likesArray?.length){
-        const images = await fetchUserImages(likesArray)
-        if(images?.length){
-          setLikedImages(images)
-        }
-      }
-    })();
-  },[likesArray])
-
-  useEffect(() =>{
-    (async()=>{
-      const firstLikedUser = await getFirstLikedUserDetails(firstLiked);
-      setFirstLikedName(firstLikedUser?.name);
-    })();
-  },[firstLiked])
-
-  useEffect(() => {
-    setLStatus(liked);
-  }, [liked]);
-
-  const handleDeleteThread = async () => {
-    await deleteThread(id);
-    if(update){
-      await update();
-    }
-  };
 
   const handleBookmark = async () => {
-    await bookmarkcard(id, user?.id, bookmarked)
-    if(update){
-      await update();
-    }
+    await bookmarkcard(id, user?.id, bookmarked, pathname)
   }
 
   return (
@@ -148,7 +83,7 @@ const ThreadCard = ({
       <div className="flex justify-between items-center m-[0.6rem]">
         <div className="flex gap-3.5">
           <Image
-            src={`/assets/heart-${liked || lStatus ? "filled" : "gray"}.svg`}
+            src={`/assets/heart-${liked ? "filled" : "gray"}.svg`}
             alt="heart"
             width={24}
             height={24}
@@ -180,7 +115,7 @@ const ThreadCard = ({
           />
           {/* bookmark icon pending*/}
         </div>
-        {section != "profile" && (!bookmarked ? (
+        {!bookmarked ? (
           <CiBookmark
             style={{ fontSize: "1.3rem" }}
             className="cursor-pointer"
@@ -192,45 +127,6 @@ const ThreadCard = ({
             className="cursor-pointer"
             onClick={handleBookmark}
           />
-        ))}
-        {section === "profile" && loggedInId === profileId && (
-          <Image
-            src="/assets/delete.svg"
-            alt="delete"
-            width={18}
-            height={18}
-            className="cursor-pointer object-contain justfy-self-start"
-            onClick={handleDeleteThread}
-          />
-        )}
-      </div>
-      <div className="flex">
-        {likedImages.map((url) => (
-          <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
-            <Image
-              src={url}
-              height={0}
-              width={0}
-              alt="icon"
-              className="h-[1.4rem] w-[1.4rem] first:m-[0.1rem]"
-              quality={100}
-              unoptimized
-              decoding="async"
-              loading="lazy"
-            />
-          </span>
-        ))}
-
-        {likes > 0 && (
-          <p className="ml-[0.5rem]">
-            Liked by <b>{firstLikedName}</b>{" "}
-            {likes > 1 && (
-              <>
-                <span>and&nbsp;</span>
-                <b>{likes - 1} others</b>
-              </>
-            )}
-          </p>
         )}
       </div>
       <div className="caption">
@@ -239,12 +135,7 @@ const ThreadCard = ({
           {content} {/* <span className="hash-tag">#Hashtag</span> */}
         </p>
       </div>
-      {comments.length > 0 && (
-        <div className="comments text-gray-1">
-          View {comments.length > 1 && "all"} {comments.length} comments
-        </div>
-      )}
     </div>
   );
 };
-export default ThreadCard;
+export default BookmarkThreadCard;

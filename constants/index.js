@@ -4,21 +4,11 @@ export const sidebarLinks = [
     route: "/",
     label: "Home",
   },
-  // {
-  //   imgURL: "/assets/search.svg",
-  //   route: "/search",
-  //   label: "Search",
-  // },
   {
     imgURL: "/assets/heart.svg",
     route: "/activity",
     label: "Activity",
   },
-  // {
-  //   imgURL: "/assets/create.svg",
-  //   route: "/create-thread",
-  //   label: "Create Thread",
-  // },
   {
     imgURL: "/assets/community.svg",
     route: "/communities",
@@ -29,6 +19,11 @@ export const sidebarLinks = [
     route: "/profile",
     label: "Profile",
   },
+  {
+    imgURL: "/assets/bookmark.svg",
+    route: "/bookmarks",
+    label: "Bookmarks",
+  }
 ];
 
 export const bottomBarLinks = [
