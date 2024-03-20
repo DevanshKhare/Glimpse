@@ -1,7 +1,6 @@
 "use client";
 import { profileTabs } from "@/constants";
 import { TabsContent } from "../ui/tabs";
-import ThreadsTabs from "./ThreadsTab";
 import { useEffect, useState } from "react";
 import { User } from "@clerk/nextjs/server";
 import { fetchUserThreads } from "@/lib/actions/user.actions";
@@ -25,12 +24,12 @@ const RenderThreadsTabSection = ({
   const [user, setUser] = useState({});
   const [skip, setSkip] = useState(0);
 
-  const hasLikedThread = (threadLikes: string[]) =>{
-    if(userId){
-      return threadLikes.includes(userId)
+  const hasLikedThread = (threadLikes: string[]) => {
+    if (userId) {
+      return threadLikes.includes(userId);
     }
     return false;
-  }
+  };
 
   useEffect(() => {
     let didFetchNewThreads = false;
@@ -68,42 +67,34 @@ const RenderThreadsTabSection = ({
           </p>
         }
       >
-        {profileTabs.map((tab) => (
-          <TabsContent
-            key={`content-${tab.label}`}
-            value={tab.value}
-            className="w-full text-light-1"
-          >
-            <section className="mt-9 flex flex-col gap-5">
-              {threads.map((thread: any) => (
-                <ThreadCard
-                  key={thread._id}
-                  id={thread._id}
-                  currentUserId={userId || ""}
-                  parentId={thread?.parentId}
-                  content={thread?.text}
-                  author={
-                    // accountType === "User"
-                    true
-                      ? { name: user.name, image: user.image, id: user.id }
-                      : {
-                          name: thread.author.name,
-                          image: thread.author.image,
-                          id: thread.author.id,
-                        }
-                  }
-                  community={thread?.community}
-                  createdAt={thread?.createdAt}
-                  comments={thread?.children}
-                  liked={hasLikedThread(thread?.likes)}
-                  likes={thread?.likes?.length}
-                  firstLiked={thread?.likes[0]}
-                  media={thread?.media}
-                />
-              ))}
-            </section>
-          </TabsContent>
-        ))}
+        <section className="mt-9 flex flex-col gap-5">
+          {threads.map((thread: any) => (
+            <ThreadCard
+              key={thread._id}
+              id={thread._id}
+              currentUserId={userId || ""}
+              parentId={thread?.parentId}
+              content={thread?.text}
+              author={
+                // accountType === "User"
+                true
+                  ? { name: user.name, image: user.image, id: user.id }
+                  : {
+                      name: thread.author.name,
+                      image: thread.author.image,
+                      id: thread.author.id,
+                    }
+              }
+              community={thread?.community}
+              createdAt={thread?.createdAt}
+              comments={thread?.children}
+              liked={hasLikedThread(thread?.likes)}
+              likes={thread?.likes?.length}
+              firstLiked={thread?.likes[0]}
+              media={thread?.media}
+            />
+          ))}
+        </section>
       </InfiniteScroll>
     </>
   );
