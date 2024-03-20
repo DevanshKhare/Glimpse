@@ -38,12 +38,8 @@ function PostThread({ userId }: { userId: string }) {
       media: "",
     },
   });
-  useEffect(() => {
-    console.log(selectedFile);
-  }, [selectedFile]);
 
   const onSubmit = async (values: z.infer<typeof ThreadsValidation>) => {
-    console.log(values)
 
     let location;
     if (selectedFile) {
