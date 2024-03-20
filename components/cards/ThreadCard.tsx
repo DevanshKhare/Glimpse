@@ -32,7 +32,9 @@ interface Props {
   liked: boolean;
   likes: number;
   media?: string;
-  firstLiked: string
+  firstLiked: string;
+  update?: Function;
+  section?: string;
 }
 const ThreadCard = ({
   id,
@@ -45,7 +47,9 @@ const ThreadCard = ({
   liked,
   likes,
   media,
-  firstLiked
+  firstLiked,
+  update,
+  section
 }: Props) => {
   const [lStatus, setLStatus] = useState(false);
   const { user } = useUser();
@@ -66,13 +70,17 @@ const ThreadCard = ({
   useEffect(() => {
     setLStatus(liked);
   }, [liked]);
+
   const handleDeleteThread = async () => {
     await deleteThread(id);
+    if(update){
+      await update();
+    }
   };
 
   return (
     <div className="flex flex-col justify-between bg-dark-2 text-light-2 rounded-[2rem] mx-0 leading-6 p-[1rem]">
-      <div className="flex gap-[1rem]">
+      <div className="flex flex-row gap-[1rem]">
         <div className="w-11 aspect-square rounded-full overflow-hidden h-11 ">
           <Image
             src={author?.image}
@@ -86,11 +94,12 @@ const ThreadCard = ({
             loading="lazy"
           />
         </div>
-        <div className="">
+        <div>
           <h3>{author?.name}</h3>
           <small>{timeAgo(createdAt)}</small>
         </div>
       </div>
+
       {media && (
         <div className="rounded-[1rem] overflow-hidden mx-0 my-[0.7rem]">
           <Image
@@ -142,6 +151,14 @@ const ThreadCard = ({
           />
           {/* bookmark icon pending*/}
         </div>
+        {section==="profile" && <Image
+          src="/assets/delete.svg"
+          alt="delete"
+          width={18}
+          height={18}
+          className="cursor-pointer object-contain justfy-self-start"
+          onClick={handleDeleteThread}
+        />}
       </div>
       <div className="flex">
         <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
@@ -171,17 +188,29 @@ const ThreadCard = ({
           />
         </span>
 
-        {likes > 0 && <p className="ml-[0.5rem]">
-          Liked by <b>{firstLikedName}</b> {likes > 1 && (<><span>and&nbsp;</span><b>{likes-1} others</b></>)}
-        </p>}
+        {likes > 0 && (
+          <p className="ml-[0.5rem]">
+            Liked by <b>{firstLikedName}</b>{" "}
+            {likes > 1 && (
+              <>
+                <span>and&nbsp;</span>
+                <b>{likes - 1} others</b>
+              </>
+            )}
+          </p>
+        )}
       </div>
       <div className="caption">
         <p>
-          <b>{user?.firstName} </b>{content}{" "}
-          {/* <span className="hash-tag">#Hashtag</span> */}
+          <b>{user?.firstName} </b>
+          {content} {/* <span className="hash-tag">#Hashtag</span> */}
         </p>
       </div>
-      {comments.length > 0 && <div className="comments text-gray-1">View {comments.length > 1 &&  "all"} {comments.length} comments</div>}
+      {comments.length > 0 && (
+        <div className="comments text-gray-1">
+          View {comments.length > 1 && "all"} {comments.length} comments
+        </div>
+      )}
     </div>
   );
 };

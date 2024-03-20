@@ -23,6 +23,14 @@ const RenderThreadsTabSection = ({
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [user, setUser] = useState({});
   const [skip, setSkip] = useState(0);
+  const [created, setCreated] = useState(0);
+
+  const update = () => {
+    setCreated((created) => created + 1);
+    setSkip(0);
+    setThreads([]);
+    setHasMore(true);
+  };
 
   const hasLikedThread = (threadLikes: string[]) => {
     if (userId) {
@@ -52,7 +60,7 @@ const RenderThreadsTabSection = ({
     if (didFetchNewThreads) {
       setSkip((prevSkip) => prevSkip + 4);
     }
-  }, [skip]);
+  }, [skip, created]);
   return (
     <>
       <InfiniteScroll
@@ -92,6 +100,8 @@ const RenderThreadsTabSection = ({
               likes={thread?.likes?.length}
               firstLiked={thread?.likes[0]}
               media={thread?.media}
+              update={update}
+              section="profile"
             />
           ))}
         </section>
