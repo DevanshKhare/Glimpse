@@ -76,7 +76,7 @@ const RenderThreadsSection = ({ user, userInfo }: Params) => {
             }
           >
             {threads?.map((thread: any, index) => (
-              <section className={`${index != 0 && "mt-9"} flex flex-col`}>
+              <section className={`${index != 0 && "mt-[1rem]"} flex flex-col`}>
                 <ThreadCard
                   key={thread?._id}
                   id={thread?._id}

@@ -9,7 +9,7 @@ const SearchBar = ({page}: {page: string}) => {
     const handleSearch = (event: any) => {
         const searchString = event?.target?.value || "";
         if(searchString) return router.push(`/${page}?q=${searchString}`)
-        else return router.push(`/`)
+        else return router.push(`${page=="communities"? "/communities": "/"}`)
     }
   return (
     <div className="searchbar">

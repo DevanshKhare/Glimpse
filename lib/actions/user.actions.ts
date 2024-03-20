@@ -58,13 +58,14 @@ export async function fetchUser(userId: string) {
   }
 }
 
-export async function fetchUserThreads(userId: string) {
+export async function fetchUserThreads(userId: string, skip: number, limit: number){
   try {
     connectToDB();
 
     const threads = await User.findOne({ id: userId }).populate({
       path: "threads",
       model: Thread,
+      options: {skip: skip, limit: limit},
       populate: {
         path: "children",
         model: Thread,

@@ -28,7 +28,7 @@ const Page = async ({searchParams}: {searchParams: {q: string}}) => {
     <section>
       <h1 className="head-text-mb-10">Search</h1>
       <SearchBar page="communities"/>
-      <div className="mt-14 flex flex-col gap-9">
+      <div className="mt-14 flex gap-6 flex-wrap justify-between">
         {result.communities.length === 0 ? (
             <p className="no-result">No communities</p>
         ):

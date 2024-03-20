@@ -7,19 +7,22 @@ interface Props {
   currentUserId: string;
   accountId: string;
   accountType: string;
+  threads: any;
+  user: any;
 }
 const ThreadsTabs = async ({
   currentUserId,
   accountId,
   accountType,
+  threads,
+  user
 }: Props) => {
-  let result: any;
-  if(accountType==="Community"){
-    result = await fetchCommunityPosts(accountId);
-  }else{
-    result = await fetchUserThreads(accountId);
-  }
-  if (!result) redirect("/");
+  // if(accountType==="Community"){
+  //   result = await fetchCommunityPosts(accountId);
+  // }else{
+  //   result = await fetchUserThreads(accountId);
+  // }
+  // if (!result) redirect("/");
 
   const hasLikedThread = (threadLikes: string[]) =>{
     if(currentUserId){
@@ -28,8 +31,8 @@ const ThreadsTabs = async ({
     return false;
   }
   return (
-    <section className="mt-9 flex flex-col gap-10">
-      {result.threads.map((thread: any) => (
+    <section className="mt-9 flex flex-col gap-5">
+      {threads.map((thread: any) => (
         <ThreadCard
           key={thread._id}
           id={thread._id}
@@ -38,7 +41,7 @@ const ThreadsTabs = async ({
           content={thread?.text}
           author={
             accountType === "User"
-              ? { name: result.name, image: result.image, id: result.id }
+              ? { name: user.name, image: user.image, id: user.id }
               : {
                   name: thread.author.name,
                   image: thread.author.image,
@@ -50,6 +53,8 @@ const ThreadsTabs = async ({
           comments={thread?.children}
           liked={hasLikedThread(thread?.likes)}
           likes={thread?.likes?.length}
+          firstLiked={thread?.likes[0]}
+          media={thread?.media}
         />
       ))}
     </section>
