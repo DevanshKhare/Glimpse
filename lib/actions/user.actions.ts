@@ -157,3 +157,14 @@ export async function getActivity(userId: string){
     throw new Error("Error fetching activity");
   }
 }
+
+export async function fetchUserImages(userIds: string[]){
+  connectToDB();
+  try {
+    const users = await User.find({ id: { $in: userIds}}).select('image').limit(4)
+    const images = users.map(user => user.image);
+    return images;
+  } catch (error) {
+    
+  }
+}

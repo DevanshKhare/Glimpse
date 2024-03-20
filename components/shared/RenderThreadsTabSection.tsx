@@ -1,6 +1,5 @@
 "use client";
-import { profileTabs } from "@/constants";
-import { TabsContent } from "../ui/tabs";
+
 import { useEffect, useState } from "react";
 import { User } from "@clerk/nextjs/server";
 import { fetchUserThreads } from "@/lib/actions/user.actions";
@@ -104,6 +103,7 @@ const RenderThreadsTabSection = ({
               section="profile"
               loggedInId={userId}
               profileId={accountId}
+              likesArray={thread?.likes}
             />
           ))}
         </section>

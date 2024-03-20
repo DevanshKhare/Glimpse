@@ -1,11 +1,11 @@
 "use client";
 import { deleteThread, getFirstLikedUserDetails, likeUnlikeThread } from "@/lib/actions/thread.actions";
-import { formatDateString, timeAgo } from "@/lib/utils";
+import { timeAgo } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { fetchUserImages } from "@/lib/actions/user.actions";
 
 interface Props {
   id: string;
@@ -37,6 +37,7 @@ interface Props {
   section?: string;
   loggedInId?: string;
   profileId?: string;
+  likesArray?: string[];
 }
 const ThreadCard = ({
   id,
@@ -53,17 +54,31 @@ const ThreadCard = ({
   update,
   section,
   loggedInId,
-  profileId
+  profileId,
+  likesArray
 }: Props) => {
   const [lStatus, setLStatus] = useState(false);
   const { user } = useUser();
   const [firstLikedName, setFirstLikedName] = useState("");
+  const [likedImages, setLikedImages] = useState<string[]>([]);
   const handleLike = async ({ id }: { id: string }) => {
     if (id && user?.id) {
       setLStatus(!lStatus);
       await likeUnlikeThread(id, user?.id);
     }
   };
+
+  useEffect(()=>{
+    (async()=>{
+      if(likesArray?.length){
+        const images = await fetchUserImages(likesArray)
+        if(images?.length){
+          setLikedImages(images)
+        }
+      }
+    })();
+  },[likesArray])
+
   useEffect(() =>{
     (async()=>{
       const firstLikedUser = await getFirstLikedUserDetails(firstLiked);
@@ -165,9 +180,10 @@ const ThreadCard = ({
         />}
       </div>
       <div className="flex">
+        {likedImages.map((url)=> (
         <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
           <Image
-            src={author.image}
+            src={url}
             height={0}
             width={0}
             alt="icon"
@@ -178,19 +194,7 @@ const ThreadCard = ({
             loading="lazy"
           />
         </span>
-        <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
-          <Image
-            src={author.image}
-            height={0}
-            width={0}
-            alt="icon"
-            className="h-[1.4rem] w-[1.4rem] first:m-[0.1rem]"
-            quality={100}
-            unoptimized
-            decoding="async"
-            loading="lazy"
-          />
-        </span>
+        ))}
 
         {likes > 0 && (
           <p className="ml-[0.5rem]">

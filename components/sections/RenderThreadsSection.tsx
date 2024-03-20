@@ -91,6 +91,7 @@ const RenderThreadsSection = ({ user, userInfo }: Params) => {
                   likes={thread?.likes?.length}
                   media={thread?.media}
                   firstLiked={thread?.likes[0]}
+                  likesArray={thread?.likes}
                 />
               </section>
             ))}
