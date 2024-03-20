@@ -102,6 +102,8 @@ const RenderThreadsTabSection = ({
               media={thread?.media}
               update={update}
               section="profile"
+              loggedInId={userId}
+              profileId={accountId}
             />
           ))}
         </section>

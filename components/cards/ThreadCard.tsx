@@ -35,6 +35,8 @@ interface Props {
   firstLiked: string;
   update?: Function;
   section?: string;
+  loggedInId?: string;
+  profileId?: string;
 }
 const ThreadCard = ({
   id,
@@ -49,7 +51,9 @@ const ThreadCard = ({
   media,
   firstLiked,
   update,
-  section
+  section,
+  loggedInId,
+  profileId
 }: Props) => {
   const [lStatus, setLStatus] = useState(false);
   const { user } = useUser();
@@ -151,7 +155,7 @@ const ThreadCard = ({
           />
           {/* bookmark icon pending*/}
         </div>
-        {section==="profile" && <Image
+        {section==="profile" && (loggedInId === profileId) && <Image
           src="/assets/delete.svg"
           alt="delete"
           width={18}
