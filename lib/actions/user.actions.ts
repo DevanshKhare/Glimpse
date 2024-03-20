@@ -58,13 +58,14 @@ export async function fetchUser(userId: string) {
   }
 }
 
-export async function fetchUserThreads(userId: string) {
+export async function fetchUserThreads(userId: string, skip: number, limit: number){
   try {
     connectToDB();
 
     const threads = await User.findOne({ id: userId }).populate({
       path: "threads",
       model: Thread,
+      options: {skip: skip, limit: limit, sort: {createdAt: "desc"}},
       populate: {
         path: "children",
         model: Thread,
@@ -154,5 +155,16 @@ export async function getActivity(userId: string){
 
   } catch (error) {
     throw new Error("Error fetching activity");
+  }
+}
+
+export async function fetchUserImages(userIds: string[]){
+  connectToDB();
+  try {
+    const users = await User.find({ id: { $in: userIds}}).select('image').limit(4)
+    const images = users.map(user => user.image);
+    return images;
+  } catch (error) {
+    
   }
 }

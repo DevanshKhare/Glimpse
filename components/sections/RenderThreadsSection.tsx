@@ -4,24 +4,33 @@ import { User } from "@clerk/nextjs/server";
 import React, { useEffect, useState } from "react";
 import ThreadCard from "../cards/ThreadCard";
 import InfiniteScroll from "react-infinite-scroll-component";
+import SingleLineThreadCreate from "../forms/SingleLineThreadCreate";
 interface Params {
   user: User | null;
+  userInfo: any;
 }
-const RenderThreadsSection = ({ user }: Params) => {
+const RenderThreadsSection = ({ user, userInfo }: Params) => {
   const [threads, setThreads] = useState<Params[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [skip, setSkip] = useState(0);
+  const [created, setCreated] = useState(0);
+  const update = () => {
+    setCreated((created) => created + 1);
+    setSkip(0);
+    setThreads([]);
+    setHasMore(true);
+  };
 
   const hasLikedThread = (threadLikes: string[]) => {
-    if (user) {
-      return threadLikes.includes(user?.id);
-    }
-    return false;
+      return user && threadLikes.includes(user?.id);
   };
+
+  const isBookmarked = (bookmarks: string[]) => {
+    return user && bookmarks.includes(user?.id);
+  }
 
   useEffect(() => {
     let didFetchNewThreads = false;
-
     (async () => {
       try {
         const { threads } = await fetchThreads(skip, 4);
@@ -39,20 +48,27 @@ const RenderThreadsSection = ({ user }: Params) => {
     if (didFetchNewThreads) {
       setSkip((prevSkip) => prevSkip + 4);
     }
-  }, [skip]);
+  }, [skip, created]);
 
   return (
     <>
-      <h1 className="head-text text-left">Home</h1>
       {threads?.length === 0 ? (
         <p className="no-result">No threads found</p>
       ) : (
         <>
+          <SingleLineThreadCreate
+            userId={userInfo?._id}
+            user={JSON.parse(JSON.stringify(user))}
+            userInfo={userInfo}
+            update={update}
+          />
           <InfiniteScroll
             dataLength={threads.length}
             next={() => setSkip((prevSkip) => prevSkip + 4)}
             hasMore={hasMore}
-            loader={<h4 className="text-gray-1 text-center mt-2">Loading...</h4>}
+            loader={
+              <h4 className="text-gray-1 text-center mt-2">Loading...</h4>
+            }
             scrollThreshold={0.9}
             endMessage={
               <p className="text-gray-1 text-center mt-2">
@@ -60,8 +76,8 @@ const RenderThreadsSection = ({ user }: Params) => {
               </p>
             }
           >
-            {threads?.map((thread: any) => (
-              <section className="mt-9 flex flex-col">
+            {threads?.map((thread: any, index) => (
+              <section className={`${index != 0 && "mt-[1rem]"} flex flex-col`}>
                 <ThreadCard
                   key={thread?._id}
                   id={thread?._id}
@@ -72,9 +88,13 @@ const RenderThreadsSection = ({ user }: Params) => {
                   community={thread?.community}
                   createdAt={thread?.createdAt}
                   comments={thread?.children}
-                  liked={hasLikedThread(thread.likes)}
+                  liked={hasLikedThread(thread?.likes)}
                   likes={thread?.likes?.length}
                   media={thread?.media}
+                  firstLiked={thread?.likes[0]}
+                  likesArray={thread?.likes}
+                  bookmarked={isBookmarked(thread?.bookmarks)}
+                  update={update}
                 />
               </section>
             ))}

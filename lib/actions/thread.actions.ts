@@ -27,7 +27,7 @@ export async function createThread({ text, author, communityId, path, media }: P
     const createdThread = await Thread.create({
       text,
       author,
-      community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+      community: communityIdObject ? communityIdObject : null, // Assign communityId if provided, or leave it null for personal account
       media: media
     });
 
@@ -37,7 +37,6 @@ export async function createThread({ text, author, communityId, path, media }: P
     });
 
     if (communityIdObject) {
-      // Update Community model
       await Community.findByIdAndUpdate(communityIdObject, {
         $push: { threads: createdThread._id },
       });
@@ -187,6 +186,33 @@ export async function deleteThread(threadId: string) {
       await Community.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
     revalidatePath("/");
 
+    }
+    revalidatePath("/");
+  } catch (error) {
+  }
+}
+
+export async function getFirstLikedUserDetails(userId: string){
+  try {
+    connectToDB();
+    let user = await User.findOne({id: userId}).select("name")
+    return user;
+  } catch (error) {
+    console.log("error finding fist user liked")
+  }
+}
+
+export async function bookmarkcard(cardId: string, userId: string, isBookmarked: boolean){
+  try {
+    connectToDB();
+    if (isBookmarked) {
+      await Thread.findByIdAndUpdate(cardId, {
+        $pull: { bookmarks: userId },
+      });
+    } else {
+      await Thread.findByIdAndUpdate(cardId, {
+        $push: { bookmarks: userId },
+      });
     }
     revalidatePath("/");
   } catch (error) {
