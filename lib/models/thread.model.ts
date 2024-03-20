@@ -35,7 +35,13 @@ const threadSchema = new mongoose.Schema({
   ],
   media: {
     type: String,
-  }
+  },
+  bookmarks: [
+    {
+      type: String,
+      ref: "User"
+    }
+  ]
 });
 
 const Thread = mongoose.models.Thread || mongoose.model('Thread', threadSchema);

@@ -22,11 +22,12 @@ const RenderThreadsSection = ({ user, userInfo }: Params) => {
   };
 
   const hasLikedThread = (threadLikes: string[]) => {
-    if (user) {
-      return threadLikes.includes(user?.id);
-    }
-    return false;
+      return user && threadLikes.includes(user?.id);
   };
+
+  const isBookmarked = (bookmarks: string[]) => {
+    return user && bookmarks.includes(user?.id);
+  }
 
   useEffect(() => {
     let didFetchNewThreads = false;
@@ -87,11 +88,13 @@ const RenderThreadsSection = ({ user, userInfo }: Params) => {
                   community={thread?.community}
                   createdAt={thread?.createdAt}
                   comments={thread?.children}
-                  liked={hasLikedThread(thread.likes)}
+                  liked={hasLikedThread(thread?.likes)}
                   likes={thread?.likes?.length}
                   media={thread?.media}
                   firstLiked={thread?.likes[0]}
                   likesArray={thread?.likes}
+                  bookmarked={isBookmarked(thread?.bookmarks)}
+                  update={update}
                 />
               </section>
             ))}

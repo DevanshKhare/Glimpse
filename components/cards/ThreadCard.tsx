@@ -1,11 +1,13 @@
 "use client";
-import { deleteThread, getFirstLikedUserDetails, likeUnlikeThread } from "@/lib/actions/thread.actions";
+import { bookmarkcard, deleteThread, getFirstLikedUserDetails, likeUnlikeThread } from "@/lib/actions/thread.actions";
 import { timeAgo } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { fetchUserImages } from "@/lib/actions/user.actions";
+import { CiBookmark } from "react-icons/ci";
+import { CiBookmarkRemove } from "react-icons/ci";
 
 interface Props {
   id: string;
@@ -38,6 +40,7 @@ interface Props {
   loggedInId?: string;
   profileId?: string;
   likesArray?: string[];
+  bookmarked?: boolean;
 }
 const ThreadCard = ({
   id,
@@ -55,7 +58,8 @@ const ThreadCard = ({
   section,
   loggedInId,
   profileId,
-  likesArray
+  likesArray,
+  bookmarked
 }: Props) => {
   const [lStatus, setLStatus] = useState(false);
   const { user } = useUser();
@@ -97,6 +101,13 @@ const ThreadCard = ({
     }
   };
 
+  const handleBookmark = async () => {
+    await bookmarkcard(id, user?.id, bookmarked)
+    if(update){
+      await update();
+    }
+  }
+
   return (
     <div className="flex flex-col justify-between bg-dark-2 text-light-2 rounded-[2rem] mx-0 leading-6 p-[1rem]">
       <div className="flex flex-row gap-[1rem]">
@@ -131,7 +142,6 @@ const ThreadCard = ({
             unoptimized
             decoding="async"
             loading="lazy"
-            style={{ imageRendering: "optimizeQuality" }}
           />
         </div>
       )}
@@ -170,30 +180,45 @@ const ThreadCard = ({
           />
           {/* bookmark icon pending*/}
         </div>
-        {section==="profile" && (loggedInId === profileId) && <Image
-          src="/assets/delete.svg"
-          alt="delete"
-          width={18}
-          height={18}
-          className="cursor-pointer object-contain justfy-self-start"
-          onClick={handleDeleteThread}
-        />}
+        {section != "profile" && (!bookmarked ? (
+          <CiBookmark
+            style={{ fontSize: "1.3rem" }}
+            className="cursor-pointer"
+            onClick={handleBookmark}
+          />
+        ) : (
+          <CiBookmarkRemove
+            style={{ fontSize: "1.3rem" }}
+            className="cursor-pointer"
+            onClick={handleBookmark}
+          />
+        ))}
+        {section === "profile" && loggedInId === profileId && (
+          <Image
+            src="/assets/delete.svg"
+            alt="delete"
+            width={18}
+            height={18}
+            className="cursor-pointer object-contain justfy-self-start"
+            onClick={handleDeleteThread}
+          />
+        )}
       </div>
       <div className="flex">
-        {likedImages.map((url)=> (
-        <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
-          <Image
-            src={url}
-            height={0}
-            width={0}
-            alt="icon"
-            className="h-[1.4rem] w-[1.4rem] first:m-[0.1rem]"
-            quality={100}
-            unoptimized
-            decoding="async"
-            loading="lazy"
-          />
-        </span>
+        {likedImages.map((url) => (
+          <span className="w-[1.4rem] h-[1.4rem] block rounded-full overflow-hidden border-2 border-solid border-gray-1 ml-[-0.6rem]">
+            <Image
+              src={url}
+              height={0}
+              width={0}
+              alt="icon"
+              className="h-[1.4rem] w-[1.4rem] first:m-[0.1rem]"
+              quality={100}
+              unoptimized
+              decoding="async"
+              loading="lazy"
+            />
+          </span>
         ))}
 
         {likes > 0 && (

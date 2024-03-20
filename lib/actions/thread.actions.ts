@@ -201,3 +201,20 @@ export async function getFirstLikedUserDetails(userId: string){
     console.log("error finding fist user liked")
   }
 }
+
+export async function bookmarkcard(cardId: string, userId: string, isBookmarked: boolean){
+  try {
+    connectToDB();
+    if (isBookmarked) {
+      await Thread.findByIdAndUpdate(cardId, {
+        $pull: { bookmarks: userId },
+      });
+    } else {
+      await Thread.findByIdAndUpdate(cardId, {
+        $push: { bookmarks: userId },
+      });
+    }
+    revalidatePath("/");
+  } catch (error) {
+  }
+}
