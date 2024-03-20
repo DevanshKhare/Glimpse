@@ -22,11 +22,13 @@ import { User } from "@clerk/nextjs/server";
 function SingleLineThreadCreate({
   userId,
   userInfo,
-  user
+  user,
+  update
 }: {
   userId: string;
   userInfo: any;
-  user: User
+  user: User;
+  update: any;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -50,6 +52,7 @@ function SingleLineThreadCreate({
       path: pathname,
       media: "",
     });
+    await update()
     form.reset();
   };
   
