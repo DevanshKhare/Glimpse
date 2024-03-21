@@ -2,7 +2,6 @@ import { User } from "@clerk/nextjs/server";
 import SingleLineThreadCreatev2 from "../forms/SingleLineThreadCreatev2";
 import { fetchThreads } from "@/lib/actions/thread.actions";
 import ThreadCardv2 from "../cards/ThreadCardv2";
-import { getBookmarked } from "@/lib/actions/user.actions";
 interface Params {
   user: User | null;
   userInfo: any;
