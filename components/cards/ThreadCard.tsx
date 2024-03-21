@@ -1,11 +1,11 @@
 "use client";
-import { bookmarkcard, deleteThread, getFirstLikedUserDetails, likeUnlikeThread } from "@/lib/actions/thread.actions";
+import {  deleteThread, getFirstLikedUserDetails, likeUnlikeThread } from "@/lib/actions/thread.actions";
 import { timeAgo } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { fetchUserImages } from "@/lib/actions/user.actions";
+import { fetchUserImages, setBookmark } from "@/lib/actions/user.actions";
 import { CiBookmark } from "react-icons/ci";
 import { CiBookmarkRemove } from "react-icons/ci";
 
@@ -102,7 +102,7 @@ const ThreadCard = ({
   };
 
   const handleBookmark = async () => {
-    await bookmarkcard(id, user?.id, bookmarked)
+    await setBookmark(id, user?.id, bookmarked)
     if(update){
       await update();
     }

@@ -1,6 +1,5 @@
 import BookmarkThreadCard from "@/components/cards/BookmarkThreadCard";
-import { getBookmarkedThreads } from "@/lib/actions/thread.actions";
-import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchUser, getBookmarked } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -9,13 +8,15 @@ const Page = async () => {
   if (!user) return null;
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
-  const threads = await getBookmarkedThreads(userInfo?._id);
+  const threads = await getBookmarked(userInfo?._id)
+  const response = await getBookmarked(userInfo?._id)
+  const bookmarks = response.map((ele: any)=>ele._id)
 
   const hasLikedThread = (threadLikes: string[]) => {
     return user && threadLikes.includes(user?.id);
   };
-  const isBookmarked = (bookmarks: string[]) => {
-    return user && bookmarks.includes(user?.id);
+  const isBookmarked = (threadID) => {
+    return user && bookmarks.includes(threadID);
   };
 
   return (
@@ -31,7 +32,7 @@ const Page = async () => {
             createdAt={thread?.createdAt}
             liked={hasLikedThread(thread?.likes)}
             media={thread?.media}
-            bookmarked={isBookmarked(thread?.bookmarks)}
+            bookmarked={isBookmarked(thread?._id)}
           />
         </section>
       ))}

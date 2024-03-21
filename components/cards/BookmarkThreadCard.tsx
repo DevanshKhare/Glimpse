@@ -1,11 +1,12 @@
 "use client"
-import { bookmarkcard, deleteThread, likeUnlikeThread } from "@/lib/actions/thread.actions";
+import { likeUnlikeThread } from "@/lib/actions/thread.actions";
 import { timeAgo } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { CiBookmark } from "react-icons/ci";
 import { CiBookmarkRemove } from "react-icons/ci";
 import { usePathname } from "next/navigation";
+import { setBookmark } from "@/lib/actions/user.actions";
 
 interface Props {
   user?: any;
@@ -40,7 +41,7 @@ const BookmarkThreadCard = ({
 
 
   const handleBookmark = async () => {
-    await bookmarkcard(id, user?.id, bookmarked, pathname)
+    await setBookmark(id, user?.id, bookmarked, pathname)
   }
 
   return (

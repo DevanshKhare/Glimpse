@@ -168,3 +168,48 @@ export async function fetchUserImages(userIds: string[]){
     
   }
 }
+
+export async function setBookmark(
+  cardId: string,
+  userId: string,
+  isBookmarked: boolean,
+  path: any
+) {
+  try {
+    connectToDB();
+
+    if (isBookmarked) {
+      await User.findOneAndUpdate(
+        { id: userId },
+        { $pull: { bookmarked: cardId } }
+      );
+    } else {
+      await User.findOneAndUpdate(
+        { id: userId },
+        { $push: { bookmarked: cardId } }
+      );
+    }
+    if (path) {
+      revalidatePath(path);
+    }
+  } catch (error) {}
+}
+
+export async function getBookmarked(userId: string){
+  try {
+    connectToDB();
+    const response = await User.findOne({_id: JSON.parse(JSON.stringify(userId))}).select("bookmarked").populate({
+      path: "bookmarked",
+      model: Thread,
+      options: {sort: "desc"},
+      populate: {
+        path: "author",
+        model: User,
+        select: "image name"
+      }
+    })
+    return JSON.parse(JSON.stringify(response?.bookmarked))
+  }catch (error) {
+    console.log(error)
+  }
+}

@@ -200,33 +200,3 @@ export async function getFirstLikedUserDetails(userId: string){
   }
 }
 
-export async function bookmarkcard(cardId: string, userId: string, isBookmarked: boolean, path: any){
-  try {
-    connectToDB();
-    if (isBookmarked) {
-      await Thread.findByIdAndUpdate(cardId, {
-        $pull: { bookmarks: userId },
-      });
-    } else {
-      await Thread.findByIdAndUpdate(cardId, {
-        $push: { bookmarks: userId },
-      });
-    }
-    if(path){
-      revalidatePath(path);
-    }
-  } catch (error) {
-  }
-}
-
-export async function getBookmarkedThreads(userId: string){
-  try {
-    connectToDB();
-    const response = await Thread.find({author: userId, bookmarks: {$exists: true, $ne: []}}).populate({
-      path: "author",
-      model: User,
-      select: "_id image"
-    })
-    return JSON.parse(JSON.stringify(response)) ;
-  }catch (error) {}
-}
