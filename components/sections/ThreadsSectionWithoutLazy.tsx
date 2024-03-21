@@ -8,7 +8,7 @@ interface Params {
   userInfo: any;
 }
 const ThreadsSectionWithoutLazy = async ({ user, userInfo }: Params) => {
-  const { threads } = await fetchThreads(0, 100);
+  const { threads } = await fetchThreads(0, 10);
   const hasLikedThread = (threadLikes: string[]) => {
     return user && threadLikes.includes(user?.id);
   };
