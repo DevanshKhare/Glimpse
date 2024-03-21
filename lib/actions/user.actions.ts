@@ -182,8 +182,8 @@ export async function setBookmark(
       ? { $pull: { bookmarked: cardId } }
       : { $push: { bookmarked: cardId } };
 
-    await User.updateOne({ id: userId }, updateOperation);
-    revalidatePath(path);
+await User.updateOne({ id: userId }, updateOperation);
+      revalidatePath(path);
   } catch (error) {}
 }
 
