@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import ThreadCard from "../cards/ThreadCard";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SingleLineThreadCreate from "../forms/SingleLineThreadCreate";
+import { getBookmarked } from "@/lib/actions/user.actions";
 interface Params {
   user: User | null;
   userInfo: any;
@@ -12,6 +13,7 @@ interface Params {
 const RenderThreadsSection = ({ user, userInfo }: Params) => {
   const [threads, setThreads] = useState<Params[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [bookmarks, setBookmarks] = useState([]);
   const [skip, setSkip] = useState(0);
   const [created, setCreated] = useState(0);
   const update = () => {
@@ -25,10 +27,18 @@ const RenderThreadsSection = ({ user, userInfo }: Params) => {
       return user && threadLikes.includes(user?.id);
   };
 
-  const isBookmarked = (bookmarks: string[]) => {
-    return user && bookmarks.includes(user?.id);
+  const isBookmarked = (threadId: string) => {
+    return user && bookmarks.includes(threadId);
   }
 
+  useEffect(()=>{
+    (async()=>{
+      const bookmarks = await getBookmarked(userInfo?._id)
+      const filter = bookmarks.map((ele: any)=>ele._id)
+      setBookmarks(filter);
+    })()
+  },[bookmarks])
+  
   useEffect(() => {
     let didFetchNewThreads = false;
     (async () => {
@@ -93,7 +103,7 @@ const RenderThreadsSection = ({ user, userInfo }: Params) => {
                   media={thread?.media}
                   firstLiked={thread?.likes[0]}
                   likesArray={thread?.likes}
-                  bookmarked={isBookmarked(thread?.bookmarks)}
+                  bookmarked={isBookmarked(thread?._id)}
                   update={update}
                 />
               </section>
