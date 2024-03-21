@@ -32,9 +32,10 @@ const BookmarkThreadCard = ({
   media,
   bookmarked,
 }: Props) => {
+
   const handleLike = async ({ id }: { id: string }) => {
     if (id && user?.id) {
-      await likeUnlikeThread(id, user?.id, liked);
+      await likeUnlikeThread(id, user?.id, liked, pathname);
     }
   };
   const pathname = usePathname();

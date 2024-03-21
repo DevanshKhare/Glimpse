@@ -8,20 +8,19 @@ const Page = async () => {
   if (!user) return null;
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
-  const threads = await getBookmarked(userInfo?._id)
   const response = await getBookmarked(userInfo?._id)
   const bookmarks = response.map((ele: any)=>ele._id)
 
   const hasLikedThread = (threadLikes: string[]) => {
     return user && threadLikes.includes(user?.id);
   };
-  const isBookmarked = (threadID) => {
+  const isBookmarked = (threadID: string) => {
     return user && bookmarks.includes(threadID);
   };
 
   return (
     <div>
-      {threads?.map((thread: any, index:any) => (
+      {response?.map((thread: any, index:any) => (
         <section className={`${index != 0 && "mt-[1rem]"} flex flex-col`}>
           <BookmarkThreadCard
             user={JSON.parse(JSON.stringify(user))}
