@@ -182,7 +182,7 @@ export async function deleteThread(threadId: string, path: string) {
     if(threadToUnlinkFromUser.length > 0) {
       await User.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
       await Community.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
-
+      revalidatePath(path);
     }
     revalidatePath(path);
   } catch (error) {

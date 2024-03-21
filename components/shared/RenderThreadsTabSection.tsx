@@ -1,8 +1,6 @@
 
 import { User } from "@clerk/nextjs/server";
-import { fetchUserThreads } from "@/lib/actions/user.actions";
-import InfiniteScroll from "react-infinite-scroll-component";
-import ThreadCard from "../cards/ThreadCard";
+import { fetchUserThreads } from "@/lib/actions/user.actions";;
 import ThreadCardv2 from "../cards/ThreadCardv2";
 
 interface Params {
