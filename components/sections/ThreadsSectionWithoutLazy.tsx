@@ -12,10 +12,9 @@ const ThreadsSectionWithoutLazy = async ({ user, userInfo }: Params) => {
   const hasLikedThread = (threadLikes: string[]) => {
     return user && threadLikes.includes(user?.id);
   };
-  const response = await getBookmarked(userInfo?._id);
-  const bookmarks = response.map((ele: any) => ele._id);
+
   const isBookmarked = (threadId: string) => {
-    return user && bookmarks.includes(threadId);
+    return user && userInfo?.bookmarked?.includes(threadId);
   };
   return (
     <>
