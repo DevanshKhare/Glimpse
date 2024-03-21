@@ -189,9 +189,7 @@ export async function setBookmark(
         { $push: { bookmarked: cardId } }
       );
     }
-    if (path) {
       revalidatePath(path);
-    }
   } catch (error) {}
 }
 

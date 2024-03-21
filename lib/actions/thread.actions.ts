@@ -132,7 +132,7 @@ export async function addCommentToThread(threadId: string, commentText: string, 
   }
 }
 
-export async function likeUnlikeThread(threadId: string, userId: string, liked: boolean) {
+export async function likeUnlikeThread(threadId: string, userId: string, liked: boolean, pathname: string) {
   try {
     connectToDB();
     if (liked) {
@@ -146,7 +146,7 @@ export async function likeUnlikeThread(threadId: string, userId: string, liked: 
         { $push: { likes: userId } }
       );
     }
-    revalidatePath("/");
+    revalidatePath(pathname);
   } catch (error) {
     console.log("error", error);
   }
@@ -172,7 +172,7 @@ async function generateIds(threadId: string, threadsToBeDeleted: any){
   return responseObject;
 }
 
-export async function deleteThread(threadId: string) {
+export async function deleteThread(threadId: string, path: string) {
   try {
     connectToDB();
     let threadsToBeDeleted: any = [];
@@ -182,10 +182,9 @@ export async function deleteThread(threadId: string) {
     if(threadToUnlinkFromUser.length > 0) {
       await User.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
       await Community.updateMany({}, {$pull: { threads: threadToUnlinkFromUser}})
-    revalidatePath("/");
 
     }
-    revalidatePath("/");
+    revalidatePath(path);
   } catch (error) {
   }
 }
