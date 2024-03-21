@@ -13,6 +13,7 @@ import { fetchUserImages, setBookmark } from "@/lib/actions/user.actions";
 import { CiBookmark } from "react-icons/ci";
 import { CiBookmarkRemove } from "react-icons/ci";
 import { usePathname } from "next/navigation";
+import { useOptimistic } from 'react';
 
 interface Props {
   id: string;
@@ -71,9 +72,15 @@ const ThreadCardv2 = ({
   const [firstLikedName, setFirstLikedName] = useState("");
   const pathname = usePathname();
   const [likedImages, setLikedImages] = useState<string[]>([]);
+
+  const [optimisticLiked, addOptimisticLiked] = useOptimistic(
+    liked,
+    (liked, newLState: boolean) => newLState
+  );
+
   const handleLike = async ({ id }: { id: string }) => {
+    addOptimisticLiked(!lStatus);
     if (id && user?.id) {
-      setLStatus((prev) => !prev);
       await likeUnlikeThread(id, user?.id, liked, pathname);
     }
   };
@@ -148,7 +155,7 @@ const ThreadCardv2 = ({
       <div className="flex justify-between items-center m-[0.6rem]">
         <div className="flex gap-3.5">
           <Image
-            src={`/assets/heart-${lStatus ? "filled" : "gray"}.svg`}
+            src={`/assets/heart-${optimisticLiked ? "filled" : "gray"}.svg`}
             alt="heart"
             width={24}
             height={24}

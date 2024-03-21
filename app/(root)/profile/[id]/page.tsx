@@ -1,5 +1,5 @@
+import RenderThreadsTabSection from "@/components/sections/RenderThreadsTabSection";
 import ProfileHeader from "@/components/shared/ProfileHeader";
-import RenderThreadsTabSection from "@/components/shared/RenderThreadsTabSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/actions/user.actions";
