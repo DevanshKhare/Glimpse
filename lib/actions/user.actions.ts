@@ -178,18 +178,12 @@ export async function setBookmark(
   try {
     connectToDB();
 
-    if (isBookmarked) {
-      await User.findOneAndUpdate(
-        { id: userId },
-        { $pull: { bookmarked: cardId } }
-      );
-    } else {
-      await User.findOneAndUpdate(
-        { id: userId },
-        { $push: { bookmarked: cardId } }
-      );
-    }
-      revalidatePath(path);
+    const updateOperation = isBookmarked
+      ? { $pull: { bookmarked: cardId } }
+      : { $push: { bookmarked: cardId } };
+
+    await User.updateOne({ id: userId }, updateOperation);
+    revalidatePath(path);
   } catch (error) {}
 }
 
