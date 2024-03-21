@@ -78,6 +78,11 @@ const ThreadCardv2 = ({
     (liked, newLState: boolean) => newLState
   );
 
+  const [optimisticBookmark, addOptimisticBookMark] = useOptimistic(
+    bookmarked,
+    (bookmarked, newLState: boolean) => newLState
+  );
+
   const handleLike = async ({ id }: { id: string }) => {
     addOptimisticLiked(!lStatus);
     if (id && user?.id) {
@@ -112,6 +117,7 @@ const ThreadCardv2 = ({
   };
 
   const handleBookmark = async () => {
+    addOptimisticBookMark(!bookmarked)
     await setBookmark(id, user?.id, bookmarked, pathname);
   };
 
@@ -187,7 +193,7 @@ const ThreadCardv2 = ({
           />
         </div>
         {section != "profile" &&
-          (!bookmarked ? (
+          (!optimisticBookmark ? (
             <CiBookmark
               style={{ fontSize: "1.3rem" }}
               className="cursor-pointer"

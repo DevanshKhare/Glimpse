@@ -52,7 +52,7 @@ export async function fetchThreads(skip=0, pageSize = 4) {
   connectToDB();
 
   //fetch the posts that have no parents
-  const threadsQuery = Thread.find({
+  const threads = await Thread.find({
     parentId: { $in: [null, undefined] },
   })
     .sort({ createdAt: "desc" })
@@ -71,7 +71,6 @@ export async function fetchThreads(skip=0, pageSize = 4) {
       path: "community",
       model: Community,
     })
-    const threads = await threadsQuery.exec();
     return { threads: JSON.parse(JSON.stringify(threads)) };
 }
 
