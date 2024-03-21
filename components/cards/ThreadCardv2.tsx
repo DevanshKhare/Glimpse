@@ -41,7 +41,6 @@ interface Props {
   likes: number;
   media?: string;
   firstLiked: string;
-  update?: Function;
   section?: string;
   loggedInId?: string;
   profileId?: string;
@@ -60,7 +59,6 @@ const ThreadCardv2 = ({
   likes,
   media,
   firstLiked,
-  update,
   section,
   loggedInId,
   profileId,
@@ -122,7 +120,7 @@ const ThreadCardv2 = ({
   };
 
   return (
-    <div className="flex flex-col justify-between bg-dark-2 text-light-2 rounded-[2rem] mx-0 leading-6 p-[1rem]">
+    <div className={`flex flex-col justify-between bg-dark-2 text-light-2 rounded-[2rem] mx-0 leading-6 p-[1rem] ${isComment && "mb-5 ml-[3rem]"}`}>
       <div className="flex flex-row gap-[1rem]">
         <div className="w-11 aspect-square rounded-full overflow-hidden h-11 ">
           <Image
@@ -192,7 +190,7 @@ const ThreadCardv2 = ({
             className="cursor-pointer object-contain"
           />
         </div>
-        {section != "profile" &&
+        {section != "profile" && !isComment &&
           (!optimisticBookmark ? (
             <CiBookmark
               style={{ fontSize: "1.3rem" }}
@@ -234,7 +232,7 @@ const ThreadCardv2 = ({
           </span>
         ))} */}
 
-        {likes > 0 && (
+        {likes > 0 && !isComment && (
           <p className="ml-[0.5rem]">
             Liked by <b>{firstLikedName}</b>{" "}
             {likes > 1 && (
@@ -248,7 +246,7 @@ const ThreadCardv2 = ({
       </div>
       <div className="caption">
         <p>
-          <b>{user?.firstName} </b>
+          <b>{author?.name} </b>
           {content} {/* <span className="hash-tag">#Hashtag</span> */}
         </p>
       </div>
