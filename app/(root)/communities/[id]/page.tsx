@@ -1,4 +1,5 @@
 import UserCard from "@/components/cards/UserCard";
+import RenderThreadsTabSection from "@/components/sections/RenderThreadsTabSection";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { communityTabs } from "@/constants";
@@ -46,11 +47,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
             value="threads"
             className="w-full text-light-1"
           >
-            {/* <ThreadsTabs
-              currentUserId={user.id}
+            <RenderThreadsTabSection
+              userId={user.id}
               accountId={communityDetails?._id}
               accountType="Community"
-            /> */}
+            />
           </TabsContent>
 
           <TabsContent

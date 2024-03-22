@@ -52,6 +52,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
               <RenderThreadsTabSection
                 userId={user.id}
                 accountId={userInfo.id}
+                accountType="User"
               />
             </TabsContent>
           ))}
