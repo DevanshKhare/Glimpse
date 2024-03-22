@@ -1,4 +1,4 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { OrganizationSwitcher, SignedIn, UserButton } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,9 +18,9 @@ function Topbar() {
         <SearchBar page="search" />
         <div className="flex items-center gap-[2rem]">
           <div className="hidden md:flex gap-[2rem] items-center">
-            <Link href="/create-thread" className="bg-primary-500 py-[0.6rem] px-[2rem] rounded-[2rem] cursor-pointer">
-              Create
-            </Link>
+            <OrganizationSwitcher appearance={{
+              baseTheme: dark
+            }}/>
           </div>
           <div className="block ">
             <SignedIn>

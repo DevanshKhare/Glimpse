@@ -2,6 +2,7 @@
 import { User } from "@clerk/nextjs/server";
 import { fetchUserThreads } from "@/lib/actions/user.actions";;
 import ThreadCardv2 from "../cards/ThreadCardv2";
+import { fetchCommunityPosts } from "@/lib/actions/community.actions";
 
 interface Params {
   user: User | null;
@@ -11,9 +12,11 @@ interface Params {
 const RenderThreadsTabSection = async({
   userId,
   accountId,
+  accountType
 }: {
   userId: string;
   accountId: string;
+  accountType?: string;
 }) => {
 
   const hasLikedThread = (threadLikes: string[]) => {
@@ -22,8 +25,12 @@ const RenderThreadsTabSection = async({
     }
     return false;
   };
-        const result = await fetchUserThreads(accountId, 0, 100);
+        const result =
+          accountType === "Community"
+            ? await fetchCommunityPosts(accountId)
+            : await fetchUserThreads(accountId, 0, 100);
         const threads = result.threads;
+        console.log(threads)
         const user = { name: result.name, image: result.image, id: result.id };
       
   return (
@@ -37,8 +44,7 @@ const RenderThreadsTabSection = async({
               parentId={thread?.parentId}
               content={thread?.text}
               author={
-                // accountType === "User"
-                true
+                accountType === "User"
                   ? { name: user.name, image: user.image, id: user.id }
                   : {
                       name: thread.author.name,
@@ -46,7 +52,7 @@ const RenderThreadsTabSection = async({
                       id: thread.author.id,
                     }
               }
-              community={thread?.community}
+              community={accountType==="Community" ? {name: result.name} :thread?.community}
               createdAt={thread?.createdAt}
               comments={thread?.children}
               liked={hasLikedThread(thread?.likes)}

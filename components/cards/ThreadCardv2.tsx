@@ -137,7 +137,7 @@ const ThreadCardv2 = ({
         </div>
         <div>
           <h3>{author?.name}</h3>
-          <small>{timeAgo(createdAt)}</small>
+          <small>{timeAgo(createdAt)} {community && ` - ${community.name} Community`}</small>
         </div>
       </div>
 

@@ -5,6 +5,7 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Thread from "../models/thread.model";
 import { FilterQuery, SortOrder } from "mongoose";
+import Community from "../models/community.model";
 
 interface Params {
   userId: string;
@@ -66,7 +67,7 @@ export async function fetchUserThreads(userId: string, skip: number, limit: numb
       path: "threads",
       model: Thread,
       options: {skip: skip, limit: limit, sort: {createdAt: "desc"}},
-      populate: {
+      populate: [{
         path: "children",
         model: Thread,
         populate: {
@@ -75,7 +76,12 @@ export async function fetchUserThreads(userId: string, skip: number, limit: numb
           select: "name image id",
         },
       },
-    });
+      {
+        path: "community",
+        model: Community
+      }
+    ]
+    })
     return JSON.parse(JSON.stringify(threads));
   } catch (error: any) {
     throw new Error("Error fetching the user threads");

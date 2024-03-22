@@ -85,7 +85,6 @@ export async function fetchCommunityPosts(id: string) {
         },
       ],
     });
-
     return JSON.parse(JSON.stringify(communityPosts));
 
   } catch (error) {
