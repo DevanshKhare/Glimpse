@@ -204,7 +204,7 @@ export async function getReplies(userId: string){
     let replies = await Thread.find({author: userId, parentId: {$ne: null}}).populate({
       path: "author",
       model: User,
-      select: "image name id"
+      select: "name id"
     }).populate({
       path: "parentId",
       model: Thread,

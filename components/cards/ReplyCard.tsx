@@ -20,8 +20,8 @@ const ReplyCard = ({ replies }: Props) => {
             </div>
           </div>
           <Link href={`/thread/${reply?.parentId?._id}`}>
-          <div className="bg-dark-4 px-3 p-3 rounded-[2rem] mt-4">
-            <div className="flex flex-row gap-[1rem] mt-6 text-[1rem] ">
+          <div className="bg-dark-4 p-3 rounded-[2rem] mt-4">
+            <div className="flex flex-row gap-[1rem] text-[1rem] ">
               <div className="w-11 aspect-square rounded-full overflow-hidden h-11 ">
                 <Image
                   src={reply?.parentId?.author?.image}
