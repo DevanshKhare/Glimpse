@@ -1,7 +1,9 @@
+import ReplyCard from "@/components/cards/ReplyCard";
 import RenderThreadsTabSection from "@/components/sections/RenderThreadsTabSection";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
+import { getReplies } from "@/lib/actions/thread.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
@@ -12,6 +14,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   if (!user) return null;
   const userInfo = await fetchUser(params.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
+  const replies = await getReplies(userInfo._id)
   return (
     <section>
       <ProfileHeader
@@ -49,11 +52,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
               value={tab.value}
               className="w-full text-light-1"
             >
-              <RenderThreadsTabSection
+              {tab.label ==="Threads" && <RenderThreadsTabSection
                 userId={user.id}
                 accountId={userInfo.id}
                 accountType="User"
-              />
+              />}
+              {tab.label === "Replies" && <ReplyCard replies={replies}/>}
             </TabsContent>
           ))}
         </Tabs>
