@@ -30,7 +30,6 @@ const RenderThreadsTabSection = async({
             ? await fetchCommunityPosts(accountId)
             : await fetchUserThreads(accountId, 0, 100);
         const threads = result.threads;
-        console.log(threads)
         const user = { name: result.name, image: result.image, id: result.id };
       
   return (

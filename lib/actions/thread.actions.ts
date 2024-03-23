@@ -198,3 +198,25 @@ export async function getFirstLikedUserDetails(userId: string){
   }
 }
 
+export async function getReplies(userId: string){
+  try {
+    connectToDB();
+    let replies = await Thread.find({author: userId, parentId: {$ne: null}}).populate({
+      path: "author",
+      model: User,
+      select: "name id"
+    }).populate({
+      path: "parentId",
+      model: Thread,
+      populate: {
+        path: "author",
+        model: User,
+        select: "image name id"
+      }
+    })
+
+    return JSON.parse(JSON.stringify(replies))
+  }catch(error){
+
+  }
+}
