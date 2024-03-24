@@ -220,3 +220,35 @@ export async function getReplies(userId: string){
 
   }
 }
+
+export async function getPersonalisedThreads(userId: string){
+  try {
+    connectToDB();
+    let threads = await User.findById(userId).select("following").populate({
+      path: "following",
+      model: User,
+      foreignField: "id",
+      populate: {
+        path: "threads",
+        model: Thread,
+        populate: [{
+          path: "children",
+          populate: {
+            path: "author",
+            model: User,
+            select: "_id name parentId image"
+          }
+        },{
+          path: "author",
+          model: User
+        }]
+      }
+    })
+    const sortedThreads = threads.following.flatMap(obj => obj.threads).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    return JSON.parse(JSON.stringify(sortedThreads));
+
+  } catch (error) {
+    console.log("error", error)
+  }
+}

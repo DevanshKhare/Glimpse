@@ -37,7 +37,6 @@ const threadSchema = new mongoose.Schema({
     type: String,
   },
 });
-
 const Thread = mongoose.models.Thread || mongoose.model('Thread', threadSchema);
 
 export default Thread;
