@@ -4,13 +4,20 @@ import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { communityTabs } from "@/constants";
 import { fetchCommunityDetails } from "@/lib/actions/community.actions";
+import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const user = await currentUser();
   if (!user) return null;
+  const userInfo = await fetchUser(user.id);
+
   const communityDetails = await fetchCommunityDetails(params.id);
+
+    const handleIsFollowing = (id: string) => {
+    return userInfo.following.includes(id)
+  }
   return (
     <section>
       <ProfileHeader
@@ -59,7 +66,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
             className="w-full text-light-1"
           >
             <section className="mt-9 flex flex-col gap-10">
-              {communityDetails?.members?.map((member:any) =>{
+              {communityDetails?.members?.map((member:any) =>(
                 <UserCard
                   key={member.id}
                   id={member.id}
@@ -67,8 +74,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
                   username={member.username}
                   imageUrl={member.image}
                   personType="User"
+                  currentUser={userInfo._id}
+                  following={handleIsFollowing(member.id)}
                 />
-              })}
+              ))}
             </section>
           </TabsContent>
         </Tabs>
