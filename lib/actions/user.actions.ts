@@ -211,3 +211,19 @@ export async function getBookmarked(userId: string){
     console.log(error)
   }
 }
+
+export async function followUnfollow(id: string, currentUser: string, following: boolean){
+  try{
+    connectToDB();
+    if(following){
+      await User.findOneAndUpdate({_id: currentUser}, {$pull: {following: id}})
+      await User.findOneAndUpdate({ id: id }, {$pull: {followers: currentUser}})
+    }else{
+      await User.findOneAndUpdate({_id: currentUser}, {$push: {following: id}})
+      await User.findOneAndUpdate({ id: id }, {$push: {followers: currentUser}})
+    }
+    revalidatePath("/")
+  }catch (error) {
+    
+  }
+}

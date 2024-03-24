@@ -52,10 +52,13 @@ export async function createCommunity(
 export async function fetchCommunityDetails(id: string) {
   try {
     connectToDB();
-    const communityDetails = await Community.findOne({ id })
+    const communityDetails = await Community.findOne({ id }).populate({
+      path: "members",
+      model: User,
+      select: "name username image id"
+    })
     return JSON.parse(JSON.stringify(communityDetails));
   } catch (error) {
-    // Handle any errors
     console.error("Error fetching community details:", error);
     throw error;
   }

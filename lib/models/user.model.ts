@@ -37,6 +37,18 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Thread"
     }
+  ],
+  following: [
+    {
+      type: String,
+      ref: "User"
+    }
+  ],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
   ]
 });
 
