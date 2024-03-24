@@ -17,7 +17,9 @@ const Page = async ({searchParams}: {searchParams: {q: string}}) => {
     pageSize: 25,
     sortBy: 'desc'
   })
-
+  const handleIsFollowing = (id: string) => {
+    return userInfo.following.includes(id)
+  }
   return (
     <section>
       <h1 className="head-text-mb-10">Search</h1>
@@ -35,6 +37,8 @@ const Page = async ({searchParams}: {searchParams: {q: string}}) => {
                 username={person.username}
                 imageUrl={person.image}
                 personType='User'
+                currentUser={userInfo._id}
+                following={handleIsFollowing(person.id)}
                 />
             ))}
         </>
