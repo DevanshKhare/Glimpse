@@ -1,13 +1,15 @@
 import { User } from "@clerk/nextjs/server";
 import SingleLineThreadCreatev2 from "../forms/SingleLineThreadCreatev2";
-import { fetchThreads } from "@/lib/actions/thread.actions";
+import { fetchThreads, getPersonalisedThreads } from "@/lib/actions/thread.actions";
 import ThreadCardv2 from "../cards/ThreadCardv2";
 interface Params {
   user: User | null;
   userInfo: any;
 }
 const ThreadsSectionWithoutLazy = async ({ user, userInfo }: Params) => {
-  const { threads } = await fetchThreads(0, 100);
+  // const { threads } = await fetchThreads(0, 100);
+  const threads = await getPersonalisedThreads(userInfo?._id)
+  console.log(JSON.stringify(threads))
   const hasLikedThread = (threadLikes: string[]) => {
     return user && threadLikes.includes(user?.id);
   };

@@ -68,7 +68,7 @@ const ThreadCard = ({
   const handleLike = async ({ id }: { id: string }) => {
     if (id && user?.id) {
       setLStatus((prev)=>!prev);
-      await likeUnlikeThread(id, user?.id, liked);
+      await likeUnlikeThread(id, user?.id, liked, "/");
     }
   };
 
