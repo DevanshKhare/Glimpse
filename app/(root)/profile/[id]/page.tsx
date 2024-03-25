@@ -15,6 +15,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const userInfo = await fetchUser(params.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
   const replies = await getReplies(userInfo._id)
+  
   return (
     <section>
       <ProfileHeader
@@ -28,7 +29,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
       <div className="mt-9">
         <Tabs defaultValue="threads" className="w-full">
           <TabsList className="tab">
-            {profileTabs.map((tab) => (
+            {profileTabs.map((tab) => {
+              if(tab.label==="Replies" && user?.id != params.id){
+                return null;
+              }
+              return(
               <TabsTrigger key={tab.label} value={tab.value} className="tab">
                 <Image
                   src={tab.icon}
@@ -43,8 +48,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
                     {userInfo?.threads?.length}
                   </p>
                 )}
-              </TabsTrigger>
-            ))}
+              </TabsTrigger>)
+})}
           </TabsList>
           {profileTabs.map((tab) => (
             <TabsContent
@@ -57,7 +62,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                 accountId={userInfo.id}
                 accountType="User"
               />}
-              {tab.label === "Replies" && <ReplyCard replies={replies}/>}
+              {tab.label === "Replies" && params.id == user?.id && <ReplyCard replies={replies}/>}
             </TabsContent>
           ))}
         </Tabs>

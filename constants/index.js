@@ -52,12 +52,16 @@ export const bottomBarLinks = [
     route: "/profile",
     label: "Profile",
   },
+    {
+    imgURL: "/assets/bookmark.svg",
+    route: "/bookmarks",
+    label: "Bookmarks",
+  }
 ];
 
 export const profileTabs = [
   { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
   { value: "replies", label: "Replies", icon: "/assets/members.svg" },
-  { value: "tagged", label: "Tagged", icon: "/assets/tag.svg" },
 ];
 
 export const communityTabs = [

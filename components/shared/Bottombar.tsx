@@ -3,9 +3,11 @@ import { bottomBarLinks } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useAuth, useUser } from "@clerk/nextjs";
 
 function Bottombar() {
   const router = useRouter();
+  const { userId } = useAuth();
   const pathname = usePathname();
   return (
     <section className="bottombar">
@@ -14,6 +16,8 @@ function Bottombar() {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;
+          if (link.route === "/profile") link.route = `${link.route}/${userId}`;
+
           return (
             <Link
               href={link.route}
