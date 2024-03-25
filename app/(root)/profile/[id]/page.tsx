@@ -25,6 +25,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
         username={userInfo.username}
         imgUrl={userInfo.image}
         bio={userInfo.bio}
+        followers={userInfo?.followers?.length}
+        following={userInfo?.following?.length}
       />
       <div className="mt-9">
         <Tabs defaultValue="threads" className="w-full">
