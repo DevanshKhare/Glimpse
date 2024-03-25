@@ -62,6 +62,7 @@ function SingleLineThreadCreatev2({
       location = await uploadImage(selectedFile, values, "thread");
     }
     await createThread({
+      userId: user?.id,
       text: values.thread,
       author: userId,
       communityId: organization ? organization.id : null,

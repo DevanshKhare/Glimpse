@@ -10,7 +10,7 @@ const ReplyCard = ({ replies }: Props) => {
 
   return (
     <div className="mt-[2.5rem]">
-      {replies.map((reply: any) => (
+      {replies?.map((reply: any) => (
         <div className="flex flex-col justify-between bg-dark-2 text-light-2 rounded-[2rem] mx-0 leading-6 p-[1rem] mb-[1rem]">
           <div>
             <h3>You replied {timeAgo(reply?.createdAt)}</h3>

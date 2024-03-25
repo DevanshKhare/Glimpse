@@ -14,7 +14,7 @@ interface Params{
     media: string
 }
 
-export async function createThread({ text, author, communityId, path, media }: Params
+export async function createThread({ text, author, communityId, path, media, userId }: Params
 ) {
   try {
     connectToDB();
