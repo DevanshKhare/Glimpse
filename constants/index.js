@@ -52,6 +52,11 @@ export const bottomBarLinks = [
     route: "/profile",
     label: "Profile",
   },
+    {
+    imgURL: "/assets/bookmark.svg",
+    route: "/bookmarks",
+    label: "Bookmarks",
+  }
 ];
 
 export const profileTabs = [
