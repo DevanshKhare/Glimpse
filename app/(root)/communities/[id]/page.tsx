@@ -13,7 +13,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   if (!user) return null;
   const userInfo = await fetchUser(user.id);
 
-  const communityDetails = await fetchCommunityDetails(params.id);
+  const communityDetails = await fetchCommunityDetails(params.id, user?.id);
 
     const handleIsFollowing = (id: string) => {
     return userInfo.following.includes(id)
