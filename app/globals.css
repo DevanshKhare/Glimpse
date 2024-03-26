@@ -100,7 +100,7 @@ body{
   }
 
   .rightsidebar {
-    @apply sticky right-0 top-0 z-20 flex h-[80vh] w-[20rem] flex-col justify-between gap-12 overflow-auto border-l rounded-[1rem] border-l-dark-4 bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
+    @apply sticky right-0 top-0 z-20 flex h-[80vh] w-[20rem] flex-col justify-between gap-12 overflow-auto border-l rounded-[1rem] border-l-dark-4 bg-dark-2 px-4 pb-6 pt-6 max-xl:hidden;
   }
   .marginresety {
     @apply my-0 !important;

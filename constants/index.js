@@ -61,7 +61,7 @@ export const bottomBarLinks = [
 
 export const profileTabs = [
   { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
-  { value: "replies", label: "Replies", icon: "/assets/members.svg" },
+  { value: "replies", label: "Replies", icon: "/assets/replyicon.svg" },
 ];
 
 export const communityTabs = [

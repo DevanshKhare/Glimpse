@@ -42,7 +42,7 @@ const ProfileHeader = ({
             <p className="text-base-medium text-gray-1">@{username}</p>
           </div>
         </div>
-        <div className="text-base-medium text-gray-1 flex gap-[1rem]">
+        {type!="Community" && <div className="text-base-medium text-gray-1 flex gap-[1rem]">
           <div className="flex flex-col items-center">
             <h2>{followers}</h2>
             <h3>Followers</h3>
@@ -51,7 +51,7 @@ const ProfileHeader = ({
             <h2>{following}</h2>
             <h3>Following</h3>
           </div>
-        </div>
+        </div>}
       </div>
       <p className="mt-6 max-w-lg text-base-regular text-light-2">{bio}</p>
       <div className="mt-12 h-0.5 w-full bg-dark-3" />

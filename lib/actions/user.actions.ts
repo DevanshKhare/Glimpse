@@ -94,12 +94,14 @@ export async function fetchUsers({
   pageSize = 20,
   pageNumber = 1,
   sortBy = "desc",
+  suggested = false
 }: {
   userId: string;
   searchString: string;
   pageSize: number;
   pageNumber: number;
   sortBy: SortOrder;
+  suggested?: boolean;
 }) {
   try {
     connectToDB();
@@ -109,7 +111,7 @@ export async function fetchUsers({
     const query: FilterQuery<typeof User> = {
       id: { $ne: userId },
     };
-
+    
     if (searchString.trim() !== "") {
       query.$or = [
         { username: { $regex: regex } },
