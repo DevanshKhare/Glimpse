@@ -49,13 +49,15 @@ export async function createCommunity(
   }
 }
 
-export async function fetchCommunityDetails(id: string) {
+export async function fetchCommunityDetails(id: string, userId: string) {
   try {
+    console.log("Hello world")
     connectToDB();
     const communityDetails = await Community.findOne({ id }).populate({
       path: "members",
       model: User,
-      select: "name username image id"
+      select: "name username image id",
+      match: { id:  { $ne: userId } },
     })
     return JSON.parse(JSON.stringify(communityDetails));
   } catch (error) {
