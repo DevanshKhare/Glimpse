@@ -1,13 +1,13 @@
-# Threads Clone
+# Glimpse
 
-Threads Clone is a web application built using Next.js, Tailwind CSS, and MongoDB. It provides a platform for users to create and interact with threads/posts, including features like posting, liking, unliking, bookmarking, commenting, following, and unfollowing.
+Glimpse is a web application built using Next.js, Tailwind CSS, and MongoDB. It provides a platform for users to create and interact with Glimpse/posts, including features like posting, liking, unliking, bookmarking, commenting, following, and unfollowing.
 
 ## Features
 
-- **Posting Threads/Posts**: Users can create and publish threads or posts.
-- **Like/Unlike**: Users can like or unlike threads or posts.
-- **Bookmarking**: Users can bookmark threads or posts for later reference.
-- **Commenting**: Users can comment on threads or posts.
+- **Posting Glimpse/Posts**: Users can create and publish Glimpse or posts.
+- **Like/Unlike**: Users can like or unlike Glimpse or posts.
+- **Bookmarking**: Users can bookmark Glimpse or posts for later reference.
+- **Commenting**: Users can comment on Glimpse or posts.
 - **Follow/Unfollow**: Users can follow or unfollow other users to stay updated on their activity.
 
 ## Environment Variables
@@ -31,8 +31,8 @@ To run the application locally or deploy it, you need to set up the following en
 
 Follow these steps to set up the application locally:
 
-1. Clone the repository: `git clone https://github.com/yourusername/threads-clone.git`
-2. Navigate to the project directory: `cd threads-clone`
+1. Clone the repository: `git clone https://github.com/yourusername/Glimpse-clone.git`
+2. Navigate to the project directory: `cd Glimpse-clone`
 3. Install dependencies: `npm install` or `yarn install`
 4. Set up environment variables by creating a `.env.local` file in the root directory and adding the required variables.
 5. Start the development server: `npm run dev` or `yarn dev`
